@@ -44,6 +44,16 @@ li {
 	list-style: none;
 }
 
+input {
+	border: none;
+	outline: none;
+	font-size: $f32;
+	color: $fc05;
+	&::placeholder {
+		color: $fc02;
+	}
+}
+
 @font-face {
 	font-family: 'iconfont';  /* project id 1204833 */
 	src: url('//at.alicdn.com/t/font_1204833_cx3a9e99loj.eot');
@@ -60,9 +70,9 @@ li {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
-.router-link-exact-active{
-  color:$navActiveColor !important;
-  .icon-mobile{
-    color:$navActiveColor !important;
-  }
+.router-link-exact-active {
+  	color: $navActiveColor !important;
+  	.icon-mobile{
+    	color:$navActiveColor !important;
+  	}
 }
