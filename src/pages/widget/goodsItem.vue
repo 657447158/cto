@@ -2,11 +2,13 @@
     <div class="goods">
         <div class="title">
             <div class="title-left">
-                <img src="https://cdn.duitang.com/uploads/item/201610/03/20161003000301_Wfm5X.jpeg" alt="">
+                <span class="img-box">
+                    <img src="https://cdn.duitang.com/uploads/item/201610/03/20161003000301_Wfm5X.jpeg" alt="">
+                </span>
                 <span>支持信用卡花呗</span>
             </div>
             <div class="title-right">
-                996单|97%
+                996单 | 97%
             </div>
         </div>
         <div class="count">
@@ -39,10 +41,10 @@
 </template>
 <style lang="scss" scoped>
     .goods {
-       border-radius: 5px;
+       border-radius: .2rem;
        box-shadow: 0px 0px 5px #e9e9e9;
        box-sizing: border-box;
-       padding: 0.3rem;
+       padding: .2rem .3rem .24rem;
        background: #ffffff;
        margin-top: 0.3rem;
        .title{
@@ -52,11 +54,13 @@
            .title-left{
                display: flex;
                align-items: center;
-                img{
+                .img-box {
+                    display: block;
                     width: 0.5rem;
                     height: 0.5rem;
                     border-radius: 50%;
                     margin-right:0.2rem;
+                    background: #999;
                 }
            }
            .title-right{
@@ -70,7 +74,7 @@
            align-items: center;
            font-size: $f24;
            color: $fc03;
-           margin-top: 0.3rem;
+           margin-top: .24rem;
            span{
                display: inline-block;
                margin-left: 0.3rem;
@@ -85,7 +89,7 @@
            display: flex;
            border-top: 1px solid $border01;
            justify-content: space-between;
-           margin-top: 0.4rem;
+           margin-top: .36rem;
            box-sizing: border-box;
            padding: 0.2rem 0;
            padding-bottom: 0;
@@ -94,8 +98,8 @@
                align-items: center;
            }
            .big{
-               font-size: $f28;
-                margin-right:0.3rem;
+                font-size: $f28;
+                margin-right: .14rem;
            }
            .vx{
                color:#69c362;
@@ -114,6 +118,9 @@
                color: $fc08 ;
                text-align: center;
                border-radius: 5px;
+               &:active {
+                   opacity: .8;
+               }
            }
        }
 

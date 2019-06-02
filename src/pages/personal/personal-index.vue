@@ -23,16 +23,16 @@
                     <span>微信</span>
                     <span class="icon-mobile icon-right">&#xe6b1;</span>
                 </router-link>
-                <li class="account-item">
+                <router-link tag="li" to="alipay" class="account-item">
                     <span class="icon-mobile alipay">&#xe820;</span>
                     <span>支付宝</span>
                     <span class="icon-mobile icon-right">&#xe6b1;</span>
-                </li>
-                <li class="account-item">
-                    <span class="icon-mobile cart">&#xe608;</span>
+                </router-link>
+                <router-link tag="li" to="card" class="account-item">
+                    <span class="icon-mobile card">&#xe608;</span>
                     <span>银行卡</span>
                     <span class="icon-mobile icon-right">&#xe6b1;</span>
-                </li>
+                </router-link>
             </ul>
         </div>
         <!-- 我的挂单 -->
@@ -115,7 +115,7 @@ export default {
             .alipay {
                 color: #5eabf6;
             }
-            .cart {
+            .card {
                 color: #ddb16a;
             }
         }

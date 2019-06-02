@@ -2,22 +2,22 @@
     <div class="wechat">
         <div class="input-box">
             <div class="wechat-item">
-                <span class="label">微信号</span>
-                <input type="text" placeholder="请输入微信号" />
+                <span class="label">支付宝账号</span>
+                <input type="text" placeholder="请输入支付宝账号" />
             </div>
             <div class="wechat-item">
                 <span class="label">真实姓名</span>
                 <input type="text" placeholder="请输入姓名" />
             </div>
-            <p class="tips">(微信收款码的真实姓名)</p>
+            <p class="tips">(支付宝收款码的真实姓名)</p>
         </div>
         <!-- 照片上传 -->
         <div class="upload-wrap">
             <div class="upload-box">
                 <span class="icon-mobile">&#xe7ff;</span>
-                <p>请上传微信收款码</p>
+                <p>请上传支付宝收款码</p>
             </div>
-            <p class="tips">提示：打开微信 > 收付款 > 收款码 > 保存图片</p>
+            <p class="tips">提示：打开支付宝 > 收钱 > 保存图片</p>
         </div>
         <!-- 上传按钮 -->
         <span class="submit-btn">提交信息</span>

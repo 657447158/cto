@@ -30,6 +30,22 @@ const routes = [
             title: '微信'
         },
         component: () => import('../pages/personal/personal-wechat')
+    },
+    {
+        path: '/alipay',
+        name: 'alipay',
+        meta: {
+            title: '支付宝'
+        },
+        component: () => import('../pages/personal/personal-alipay')
+    },
+    {
+        path: '/card',
+        name: 'card',
+        meta: {
+            title: '银行卡'
+        },
+        component: () => import('../pages/personal/personal-card')
     }
 ]
 
