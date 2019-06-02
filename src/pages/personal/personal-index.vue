@@ -18,28 +18,34 @@
         <div class="account">
             <h2>收款账号</h2>
             <ul class="account-list">
-                <li class="account-item">
+                <router-link tag="li" to="wechat" class="account-item">
                     <span class="icon-mobile wechat">&#xe81f;</span>
                     <span>微信</span>
                     <span class="icon-mobile icon-right">&#xe6b1;</span>
-                </li>
+                </router-link>
                 <li class="account-item">
                     <span class="icon-mobile alipay">&#xe820;</span>
                     <span>支付宝</span>
                     <span class="icon-mobile icon-right">&#xe6b1;</span>
                 </li>
                 <li class="account-item">
-                    <span class="icon-mobile wechat">&#xe608;</span>
+                    <span class="icon-mobile cart">&#xe608;</span>
                     <span>银行卡</span>
                     <span class="icon-mobile icon-right">&#xe6b1;</span>
                 </li>
             </ul>
         </div>
+        <!-- 我的挂单 -->
+        <div class="order">
+            <span class="icon-mobile icon-left">&#xe608;</span>
+            <span class="order-name">我的挂单</span>
+            <span class="icon-mobile icon-right">&#xe6b1;</span>
+        </div>
     </div>
 </template>
 <script>
 export default {
-    
+
 }
 </script>
 <style lang="scss" scoped>
@@ -78,7 +84,7 @@ export default {
             background: $bg02;
             overflow: hidden;
             h2 {
-                margin-bottom: 0.62rem;
+                margin-bottom: 0.24rem;
                 font-size: $f30;
                 color: $fc06;
             }
@@ -86,11 +92,16 @@ export default {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                padding-bottom: 0.48rem;
+                padding: .38rem 0 .48rem;
                 color: $fc09;
                 font-size: $f30;
+                border-bottom: 1px solid $border01;
+                &:last-child {
+                    border-bottom: none;
+                }
                 span {
                     &:first-child {
+                        font-size: $f44;
                         margin-right: 0.24rem;
                     }
                     &:nth-child(2) {
@@ -100,11 +111,34 @@ export default {
             }
             .wechat {
                 color: #68c263;
-                font-size: .44rem;
             }
             .alipay {
                 color: #5eabf6;
-                font-size: .44rem;
+            }
+            .cart {
+                color: #ddb16a;
+            }
+        }
+        .order {
+            margin-top: 0.14rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: .38rem .32rem .48rem;
+            color: $fc09;
+            font-size: $f30;
+            background: $bg02;
+            overflow: hidden;
+            &-name {
+                flex: 1;
+            }
+            .icon-left {
+                margin-right: 0.24rem;
+                color: #74c3ed;
+                font-size: $f44;
+            }
+            .icon-right {
+                
             }
         }
     }

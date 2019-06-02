@@ -22,6 +22,14 @@ const routes = [
             title: '我的'
         },
         component: () => import('../pages/personal/personal-index')
+    },
+    {
+        path: '/wechat',
+        name: 'wechat',
+        meta: {
+            title: '微信'
+        },
+        component: () => import('../pages/personal/personal-wechat')
     }
 ]
 

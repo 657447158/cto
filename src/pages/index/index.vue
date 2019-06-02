@@ -16,10 +16,10 @@
             SEED当前的价格：<span>¥1.0000</span>
         </div>
         <div class="content">
-                <goods-item/>
-                 <goods-item/>
-                  <goods-item/>
-                   <goods-item/>
+            <goods-item/>
+            <goods-item/>
+            <goods-item/>
+            <goods-item/>
         </div>
     </div>
 </template>
