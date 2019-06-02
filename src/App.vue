@@ -22,8 +22,7 @@
       }
     },
     watch:{
-      $route( to , from ){   
-       console.log( to )
+      $route( to ){   
        if(to.name === ORDER || to.name ===INDEX || to.name === PERSONAL){
          this.showFooter = true;
        }else{
