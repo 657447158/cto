@@ -53,10 +53,10 @@
                display: flex;
                align-items: center;
                 img{
-                    width: 1rem;
-                    height: 1rem;
+                    width: 0.5rem;
+                    height: 0.5rem;
                     border-radius: 50%;
-                    margin-right:10px;
+                    margin-right:0.2rem;
                 }
            }
            .title-right{
@@ -87,9 +87,14 @@
            justify-content: space-between;
            margin-top: 0.4rem;
            box-sizing: border-box;
-           padding: 0.3rem 0;
+           padding: 0.2rem 0;
+           padding-bottom: 0;
+           .buyorsell-left{
+               display: flex;
+               align-items: center;
+           }
            .big{
-               font-size: $f56;
+               font-size: $f28;
                 margin-right:0.3rem;
            }
            .vx{

@@ -63,7 +63,7 @@ export default {
             display: flex;
             justify-content: space-evenly;
             align-items: center;
-            height: 1.8rem;
+            height: 0.9rem;
             // padding: 0.6rem 0 ;
             background: $fc08;
             border-bottom: 1px solid $border01 ;
