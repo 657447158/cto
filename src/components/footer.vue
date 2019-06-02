@@ -32,11 +32,11 @@
             flex-direction: column;
             align-items: center;
             font-size: $f20;
+            color: $navColor;
         }
         .icon-mobile {
             margin-bottom: 0.1rem;
             font-size: .44rem;
-            color: $fc06
         }
     }
 </style>

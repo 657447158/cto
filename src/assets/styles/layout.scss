@@ -60,3 +60,9 @@ li {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
+.router-link-exact-active{
+  color:$navActiveColor !important;
+  .icon-mobile{
+    color:$navActiveColor !important;
+  }
+}
