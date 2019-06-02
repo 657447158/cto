@@ -17,6 +17,9 @@
         </div>
         <div class="content">
                 <goods-item/>
+                 <goods-item/>
+                  <goods-item/>
+                   <goods-item/>
         </div>
     </div>
 </template>

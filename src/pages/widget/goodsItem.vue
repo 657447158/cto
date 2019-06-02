@@ -26,8 +26,14 @@
             </div>
         </div>
         <div class="buyorsell">
-            <span class="icon-mobile big vx" >&#xe81f;</span>
-            <span class="icon-mobile big zfb" >&#xe820;</span>
+            <div class="buyorsell-left">
+                <span class="icon-mobile big vx" >&#xe81f;</span>
+                <span class="icon-mobile big zfb" >&#xe820;</span>
+                <span class="icon-mobile big yhk" >&#xe608;</span>
+            </div>
+            <div class="buyorsell-right">
+                出售
+            </div>
         </div>
     </div>
 </template>
@@ -38,6 +44,7 @@
        box-sizing: border-box;
        padding: 0.3rem;
        background: #ffffff;
+       margin-top: 0.3rem;
        .title{
            display: flex;
            justify-content: space-between;
@@ -78,8 +85,12 @@
            display: flex;
            border-top: 1px solid $border01;
            justify-content: space-between;
+           margin-top: 0.4rem;
+           box-sizing: border-box;
+           padding: 0.3rem 0;
            .big{
                font-size: $f56;
+                margin-right:0.3rem;
            }
            .vx{
                color:#69c362;
@@ -87,7 +98,19 @@
            .zfb{
                color:#61aff7;
            }
-
+            .yhk{
+                color: #efcc94;
+           }
+           .buyorsell-right{
+               height: 0.6rem;
+               width: 1.4rem;
+               background: $fc07;
+               line-height: 0.6rem;
+               color: $fc08 ;
+               text-align: center;
+               border-radius: 5px;
+           }
        }
+
     }
 </style>
