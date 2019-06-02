@@ -27,7 +27,7 @@
         </div>
         <div class="buyorsell">
             <span class="icon-mobile big vx" >&#xe81f;</span>
-            <span class="icon-mobile big zfb" >&#xe605;</span>
+            <span class="icon-mobile big zfb" >&#xe820;</span>
         </div>
     </div>
 </template>
