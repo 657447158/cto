@@ -35,6 +35,7 @@ export default {
 </script>
 <style lang="scss" scoped>
     .index {
+        padding-bottom: 1.02rem;
         &-tab {
             padding: 0.08rem 0 .18rem;
             display: flex;
