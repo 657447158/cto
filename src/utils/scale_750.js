@@ -40,6 +40,7 @@
     if (width / dpr > 750) {
       width = 750 * dpr
     }
+    console.log(width);
     docEl.style.fontSize = 100 * (width / 750) + 'px'
   }
   recalc()
