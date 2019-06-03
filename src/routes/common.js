@@ -46,6 +46,14 @@ const routes = [
             title: '银行卡'
         },
         component: () => import('../pages/personal/personal-card')
+    },
+    {
+        path: '/orderDetail',
+        name: 'orderDetail',
+        meta: {
+            title: '订单详情'
+        },
+        component: () => import('../pages/order/orderDetail.vue')
     }
 ]
 
