@@ -80,3 +80,32 @@ img {
     	color:$navActiveColor !important;
   	}
 }
+
+
+.animation-translate-bottom-in {
+	animation: bottomIn ease .4s forwards
+}
+  
+.animation-translate-bottom-out {
+	animation: bottomOut ease .4s forwards
+}
+  
+@keyframes bottomIn {
+	0% {
+	  	transform: translateY(100%)
+	}
+  
+	to {
+	  	transform: translateY(0)
+	}
+}
+  
+@keyframes bottomOut {
+	0% {
+	  	transform: translateY(0)
+	}
+  
+	to {
+	  	transform: translateY(100%)
+	}
+}

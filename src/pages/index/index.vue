@@ -9,7 +9,7 @@
             <div class="nav-item">HRC</div>
             <div class="nav-item">PAN</div>
             <div class="nav-item">SEED</div>
-            <div class="nav-item">更多 <span class="delta"></span></div>
+            <div class="nav-item" @click="showModal">更多 <span class="delta"></span></div>
             <div class="nav-item">筛选 <span class="delta"></span></div>
         </div>
         <div class="index-current-price">
@@ -21,14 +21,39 @@
             <goods-item/>
             <goods-item/>
         </div>
+        <!-- 更多弹窗 -->
+        <cto-modal :show="show">
+            <More :show="show" @hide="hide" />
+        </cto-modal>
+        <!-- 选择弹窗 -->
+        <!-- <cto-modal :show="show">
+            <More :show="show" @hide="hide" />
+        </cto-modal> -->
     </div>
 </template>
 <script>
 import GoodsItem from '../widget/goodsItem';
+import More from './more'
+import Choose from './choose'
 
 export default {
     components: {
-      GoodsItem
+      GoodsItem,
+      More,
+      Choose
+    },
+    data () {
+        return {
+            show: true
+        }
+    },
+    methods: {
+        showModal () {
+            this.show = true
+        },
+        hide () {
+            this.show = false
+        }
     }
 }
     
@@ -92,10 +117,10 @@ export default {
                 .delta{
                     width:0;
                     height:0;
-                    border-width:5px 5px 0;
-                    border-style:solid;
-                    border-color:$fc02 transparent transparent;/*灰 透明 透明 */
-                    position:relative;
+                    border-width: .1rem .1rem 0;
+                    border-style: solid;
+                    border-color: $fc02 transparent transparent;/*灰 透明 透明 */
+                    position: relative;
                     display: inline-block;
                     margin-left:4px;
                 }

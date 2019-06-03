@@ -39,4 +39,22 @@ $bg03       :#f9f9f9;
 $border01   :#f0f0f0;
 //底部导航图标字体颜色
 $navColor    :#c5c5c5;
-$navActiveColor:#000000
+$navActiveColor:#000000;
+
+
+@mixin ellipsis($w:auto) {
+    width: $w;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+}
+/*多行文本溢出*/
+@mixin ellipsisLn($line) {
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: $line;
+    -webkit-box-orient: vertical;
+}
