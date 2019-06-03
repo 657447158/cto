@@ -9,8 +9,8 @@
             <div class="nav-item">HRC</div>
             <div class="nav-item">PAN</div>
             <div class="nav-item">SEED</div>
-            <div class="nav-item" @click="showModal">更多 <span class="delta"></span></div>
-            <div class="nav-item">筛选 <span class="delta"></span></div>
+            <div class="nav-item" @click="showMoreModal">更多 <span class="delta"></span></div>
+            <div class="nav-item" @click="showChooseModal">筛选 <span class="delta"></span></div>
         </div>
         <div class="index-current-price">
             SEED当前的价格：<span>¥1.0000</span>
@@ -22,13 +22,13 @@
             <goods-item/>
         </div>
         <!-- 更多弹窗 -->
-        <cto-modal :show="show">
-            <More :show="show" @hide="hide" />
+        <cto-modal :show="moreShow">
+            <More :show="moreShow" @hide="hide" />
         </cto-modal>
         <!-- 选择弹窗 -->
-        <!-- <cto-modal :show="show">
-            <More :show="show" @hide="hide" />
-        </cto-modal> -->
+        <cto-modal :show="chooseShow">
+            <Choose :show="chooseShow" @hide="hide" />
+        </cto-modal>
     </div>
 </template>
 <script>
@@ -44,15 +44,20 @@ export default {
     },
     data () {
         return {
-            show: true
+            moreShow: false,
+            chooseShow: false
         }
     },
     methods: {
-        showModal () {
-            this.show = true
+        showMoreModal () {
+            this.moreShow = true
+        },
+        showChooseModal () {
+            this.chooseShow = true
         },
         hide () {
-            this.show = false
+            this.moreShow = false
+            this.chooseShow = false
         }
     }
 }
