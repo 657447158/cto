@@ -36,11 +36,11 @@
             </ul>
         </div>
         <!-- 我的挂单 -->
-        <div class="order">
+        <router-link tag="div" class="order" to="my-order">
             <span class="icon-mobile icon-left">&#xe608;</span>
             <span class="order-name">我的挂单</span>
             <span class="icon-mobile icon-right">&#xe6b1;</span>
-        </div>
+        </router-link>
     </div>
 </template>
 <script>

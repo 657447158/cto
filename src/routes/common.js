@@ -70,6 +70,14 @@ const routes = [
             title: '为什么要设置溢价'
         },
         component: () => import('../pages/order/mark-detail.vue')
+    },
+    {
+        path: '/my-order',
+        name: 'my-order',
+        meta: {
+            title: '我的挂单'
+        },
+        component: () => import('../pages/personal/my-order.vue')
     }
 ]
 
