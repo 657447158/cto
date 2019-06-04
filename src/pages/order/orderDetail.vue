@@ -50,17 +50,72 @@
     </div>
     <div class="itembox">
         <p class="title p03">订单信息</p>
+        <div class="order-info p03">
+            <div class="pay-item dark">
+                交易单价
+                <div class="pay-info-right">
+                    ¥0.8888
+                </div>
+            </div>
+            <div class="pay-item dark">
+                交易数量
+                <div class="pay-info-right">
+                    8999
+                </div>
+            </div>
+            <div class="pay-item dark">
+                交易单号
+                <div class="pay-info-right">
+                    ddldlelrefkkdkwkkf
+                </div>
+            </div>
+            <div class="pay-item dark">
+                下单时间
+                <div class="pay-info-right">
+                    2034-21-23 33:33:22
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="itembox">
+        <p class="title p03">交易说明</p>
+        <p class="desc p03">1.对方的数字货币已经委托给平台,您完成付款后对方确认后将会把数字货币发送给您</p>
+        <p class="desc p03">2.给对方付款后请务必点击下方“我已完成付款”</p>
     </div>
     <div class="pay-btn p03">
         <div class="cancle">取消</div>
         <div class="pay-done">我已经完成付款（14:58）</div>
     </div>
+      <!-- 更多弹窗 -->
+        <cto-modal :show="moreShow">
+            <choose-payway @hide="hide"/>
+        </cto-modal>
   </div>
 </template>
+<script>
+import ChoosePayway from './ChoosePayWay';
+export default {
+    data(){
+        return {
+            moreShow:true,
+        }
+    },
+    methods:{
+        hide(){
+            this.moreShow = false;
+        }
+    },
+    components:{
+        ChoosePayway
+    }
+}
+</script>
+
 <style lang="scss" scoped>
 .order-detail {
   background: $bg04;
   box-sizing: border-box;
+  padding-bottom: 1.2rem;
   .p03{
       padding: 0 0.3rem;
   }
@@ -73,6 +128,12 @@
           line-height: 1rem;
           font-size: $f28;
           color: $fc06;
+      }
+      .desc{
+          font-size: $f24;
+          color: $fc02 ;
+          line-height: $f36;
+          margin-bottom: $f24;
       }
   }
   .refresh {
@@ -135,8 +196,11 @@
       height: 0.88rem;
       align-items: center;
       border-bottom: 1px solid $border02 ;
-      font-size: $f24 ;
+      font-size: $f26 ;
       color: $fc03 ;
+      &.dark{
+          color:#5b5b5b;
+      }
       .pay-info-right{
           font-size: $f22;
           color: $fc06 ;
