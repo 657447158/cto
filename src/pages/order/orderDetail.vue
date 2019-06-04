@@ -84,12 +84,12 @@
     </div>
     <div class="pay-btn p03">
         <div class="cancle">取消</div>
-        <div class="pay-done">我已经完成付款（14:58）</div>
+        <div class="pay-done" @click="showPop">我已经完成付款（14:58）</div>
     </div>
-      <!-- 更多弹窗 -->
-        <cto-modal :show="moreShow">
-            <choose-payway @hide="hide"/>
-        </cto-modal>
+    <!-- 更多弹窗 -->
+    <cto-modal :show="moreShow">
+        <choose-payway @hide="hide"/>
+    </cto-modal>
   </div>
 </template>
 <script>
@@ -97,12 +97,15 @@ import ChoosePayway from './ChoosePayWay';
 export default {
     data(){
         return {
-            moreShow:true,
+            moreShow: false,
         }
     },
     methods:{
         hide(){
             this.moreShow = false;
+        },
+        showPop () {
+            this.moreShow = true;
         }
     },
     components:{
