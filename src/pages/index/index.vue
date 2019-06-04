@@ -1,5 +1,9 @@
 <template>
     <div class="index">
+        <router-link
+            class="icon-mobile go-btn"
+            to="create-order"
+        >&#xe65b;</router-link>
         <div class="index-tab">
             <div
                 class="index-tab-item"
@@ -35,7 +39,7 @@
         <cto-modal :show="moreShow">
             <More :show="moreShow" @hide="hide" />
         </cto-modal>
-        <!-- 选择弹窗 -->
+        <!-- 筛选弹窗 -->
         <cto-modal :show="chooseShow">
             <Choose :show="chooseShow" @hide="hide" />
         </cto-modal>
@@ -88,6 +92,23 @@ export default {
 <style lang="scss" scoped>
     .index {
         padding-bottom: 1.02rem;
+        .go-btn {
+            display: block;
+            position: fixed;
+            right: 0.3rem;
+            bottom: 2.02rem;
+            z-index: 99;
+            width: 0.9rem;
+            height: 0.9rem;
+            color: $fc06;
+            font-size: $f40;
+            font-weight: bold;
+            line-height: .9rem;
+            text-align: center;
+            border-radius: 50%;
+            background: $bg02;
+            box-shadow: 0 0 .2rem rgba(0, 0, 0, .5)
+        }
         &-tab {
             padding: 0.08rem 0 .18rem;
             display: flex;

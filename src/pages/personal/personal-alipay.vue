@@ -29,7 +29,15 @@
 </template>
 <script>
 export default {
-    
+    methods: {
+        fileImage (event) {
+            event.preventDefault()
+            this.submitForm()
+            return false
+        },
+        submitForm () {
+        }
+    }
 }
 </script>
 <style lang="scss" scoped>

@@ -8633,3 +8633,8 @@ yorkie@^2.0.0:
     is-ci "^1.0.10"
     normalize-path "^1.0.0"
     strip-indent "^2.0.0"
+
+zepto-webpack@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.npm.taobao.org/zepto-webpack/download/zepto-webpack-1.2.1.tgz#0726107748a90c96349f3076c015a06cc6222d5f"
+  integrity sha1-ByYQd0ipDJY0nzB2wBWgbMYiLV8=

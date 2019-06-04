@@ -8,27 +8,26 @@
 <script>
   import Footer from './components/footer';
 
-
   const ORDER = 'order';
   const INDEX = 'index';
   const PERSONAL ='personal';
   export default {
     components: {
-      Footer
+		Footer
     },
-    data(){
-      return {
-         showFooter:true,
-      }
+    data () {
+		return {
+			showFooter:true,
+		}
     },
     watch:{
-      $route( to ){   
-       if(to.name === ORDER || to.name ===INDEX || to.name === PERSONAL){
-         this.showFooter = true;
-       }else{
-         this.showFooter = false;
-       }
-     }
+		$route(to){   
+			if(to.name === ORDER || to.name ===INDEX || to.name === PERSONAL){
+				this.showFooter = true;
+			} else {
+				this.showFooter = false;
+			}
+		}
     }
   }
 </script>
