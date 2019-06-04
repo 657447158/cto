@@ -16,6 +16,10 @@
             <div class="upload-box">
                 <span class="icon-mobile">&#xe7ff;</span>
                 <p>请上传微信收款码</p>
+                <form action="javascript:;" method="post" @change="fileImage($event)" enctype="multipart/form-data">
+                    <input type="file" name="Filedata" class="upload-btn"/>
+                    <input type="hidden" name="path"/>
+                </form>
             </div>
             <p class="tips">提示：打开微信 > 收付款 > 收款码 > 保存图片</p>
         </div>
@@ -24,8 +28,17 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
-    
+    methods: {
+        fileImage (event) {
+            event.preventDefault()
+            this.submitForm()
+            return false
+        },
+        submitForm () {
+        }
+    }
 }
 </script>
 <style lang="scss" scoped>
@@ -68,8 +81,17 @@ export default {
                 color: #eb7219;
                 font-size: $f26;
             }
+            .upload-btn {
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                opacity: 0;
+            }
         }
         .upload-box {
+            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;

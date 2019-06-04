@@ -18,6 +18,10 @@
                 <p>请上传支付宝收款码</p>
             </div>
             <p class="tips">提示：打开支付宝 > 收钱 > 保存图片</p>
+            <form action="javascript:;" method="post" @change="fileImage($event)" enctype="multipart/form-data">
+                <input type="file" name="Filedata" class="upload-btn"/>
+                <input type="hidden" name="path"/>
+            </form>
         </div>
         <!-- 上传按钮 -->
         <span class="submit-btn">提交信息</span>
@@ -68,8 +72,17 @@ export default {
                 color: #eb7219;
                 font-size: $f26;
             }
+            .upload-btn {
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                opacity: 0;
+            }
         }
         .upload-box {
+            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;

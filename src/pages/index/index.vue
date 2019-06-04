@@ -1,20 +1,30 @@
 <template>
     <div class="index">
         <div class="index-tab">
-            <div class="index-tab-item">我要买币</div>
-            <div class="index-tab-item active">我要卖币</div>
+            <div
+                class="index-tab-item"
+                v-for="(item, index) in tabList"
+                :key="index"
+                :class="tabIndex === index && 'active'"
+                @click="chooseTab(index)"
+            >
+                {{item}}
+            </div>
         </div>
         <div class="index-nav">
-            <div class="nav-item active">BCV</div>
-            <div class="nav-item">HRC</div>
-            <div class="nav-item">PAN</div>
-            <div class="nav-item">SEED</div>
+            <div
+                class="nav-item"
+                v-for="(item, index) in navList"
+                :key="index"
+                :class="navIndex === index && 'active'"
+                @click="chooseNav(index)"
+            >
+                {{item}}
+            </div>
             <div class="nav-item" @click="showMoreModal">更多 <span class="delta"></span></div>
             <div class="nav-item" @click="showChooseModal">筛选 <span class="delta"></span></div>
         </div>
-        <div class="index-current-price">
-            SEED当前的价格：<span>¥1.0000</span>
-        </div>
+        <div class="index-current-price">SEED当前的价格：<span>¥1.0000</span></div>
         <div class="content">
             <goods-item/>
             <goods-item/>
@@ -45,10 +55,22 @@ export default {
     data () {
         return {
             moreShow: false,
-            chooseShow: false
+            chooseShow: false,
+            tabList: ['我要买币', '我要卖币'],
+            tabIndex: 0,
+            navList: ['BCV', 'HRC', 'PAN', 'SEED'],
+            navIndex: 0
         }
     },
     methods: {
+        // 切换tab（买卖币）
+        chooseTab (index) {
+            this.tabIndex = index
+        },
+        // 切换nav
+        chooseNav (index) {
+            this.navIndex = index
+        },
         showMoreModal () {
             this.moreShow = true
         },
