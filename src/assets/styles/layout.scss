@@ -49,6 +49,17 @@ input {
 	outline: none;
 	font-size: $f32;
 	color: $fc05;
+	background: none;
+	&::placeholder {
+		color: $fc02;
+	}
+}
+textarea {
+	font-size: $f26;
+	border: none;
+	outline: none;
+	color: $fc05;
+	background: none;
 	&::placeholder {
 		color: $fc02;
 	}
@@ -60,12 +71,12 @@ img {
 
 @font-face {
 	font-family: 'iconfont';  /* project id 1204833 */
-	src: url('//at.alicdn.com/t/font_1204833_urt8ou62p6.eot');
-	src: url('//at.alicdn.com/t/font_1204833_urt8ou62p6.eot?#iefix') format('embedded-opentype'),
-	url('//at.alicdn.com/t/font_1204833_urt8ou62p6.woff2') format('woff2'),
-	url('//at.alicdn.com/t/font_1204833_urt8ou62p6.woff') format('woff'),
-	url('//at.alicdn.com/t/font_1204833_urt8ou62p6.ttf') format('truetype'),
-	url('//at.alicdn.com/t/font_1204833_urt8ou62p6.svg#iconfont') format('svg');
+	src: url('//at.alicdn.com/t/font_1204833_bu6y7gazr2f.eot');
+	src: url('//at.alicdn.com/t/font_1204833_bu6y7gazr2f.eot?#iefix') format('embedded-opentype'),
+	url('//at.alicdn.com/t/font_1204833_bu6y7gazr2f.woff2') format('woff2'),
+	url('//at.alicdn.com/t/font_1204833_bu6y7gazr2f.woff') format('woff'),
+	url('//at.alicdn.com/t/font_1204833_bu6y7gazr2f.ttf') format('truetype'),
+	url('//at.alicdn.com/t/font_1204833_bu6y7gazr2f.svg#iconfont') format('svg');
   }
 .icon-mobile {
 	font-family: "iconfont" !important;

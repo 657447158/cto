@@ -62,6 +62,14 @@ const routes = [
             title: '创建订单'
         },
         component: () => import('../pages/order/create-order.vue')
+    },
+    {
+        path: '/mark-detail',
+        name: 'mark-detail',
+        meta: {
+            title: '为什么要设置溢价'
+        },
+        component: () => import('../pages/order/mark-detail.vue')
     }
 ]
 

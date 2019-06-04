@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="create-item">
-                <span class="label">收购总量(WL)</span>
+                <span class="label">收购总量({{iconType}})</span>
                 <input type="text" placeholder="0.0001">
             </div>
             <div class="create-item">
@@ -48,6 +48,35 @@
                     </label>
                 </div>
             </div>
+            <!-- 浮动价 -->
+            <div class="create-item2" v-show="priceTypeIndex === 0">
+                <div class="create-item2-top">
+                    <span class="label">固定价格</span>
+                    <span class="tip">市场参考价￥0.564</span>
+                </div>
+                <div class="create-item2-bottom">
+                    <input type="text" placeholder="不随市价浮动" />
+                    <span>CNY</span>
+                </div>
+                <p class="create-item2-tip">发布后，该产品不会因市场波动而改变</p>
+            </div>
+            <!-- 一口价 -->
+            <div class="create-item2" v-show="priceTypeIndex === 1">
+                <div class="create-item2-top">
+                    <span class="label">设置溢价</span>
+                    <span class="tip">市场参考价￥0.1023</span>
+                    <router-link class="icon-mobile icon-mark" to="mark-detail">&#xe821;</router-link>
+                </div>
+                <div class="create-item2-bottom">
+                    <input type="text" placeholder="建议 0 到 20" />
+                    <span>%</span>
+                </div>
+                <p class="create-item2-tip">浮动价 -</p>
+            </div>
+            <div class="create-item3">
+                <textarea placeholder="请输入备注信息(最多输入20个字符)"></textarea>
+            </div>
+            <div class="create-btn">创建挂单</div>
         </div>
         <!-- 币种选择modal -->
         <cto-modal :show="show" class="coin-type" dir="bottom" @hide="cancel">
@@ -68,7 +97,6 @@
 </template>
 <script>
     import Swiper from '@/utils/swiper'
-import { setTimeout } from 'timers';
     export default {
         data () {
             return {
@@ -77,7 +105,8 @@ import { setTimeout } from 'timers';
                 iconType: 'WL',
                 show: false,
                 coinTypeList: ['WL', 'DKS', 'DSFFD', 'JJNSD', 'SDWER', 'SONZ'],
-                coinIndex: 0
+                coinIndex: 0,
+                blockShow: true
             }
         },
         methods: {
@@ -161,6 +190,64 @@ import { setTimeout } from 'timers';
                 }
             }
         }
+        &-item1 {
+            height: 1.18rem;
+        }
+        &-item2 {
+            font-size: $f26;
+            .label {
+                margin-right: 0.2rem;
+            }
+            .tip {
+                flex: 1;
+                font-size: $f24;
+                color: $fc02;
+            }
+            .icon-mark {
+                color: $fc07;
+                font-size: $f30;
+            }
+            &-top {
+                display: flex;
+                line-height: .92rem;
+            }
+            &-bottom {
+                display: flex;
+                justify-content: space-between;
+                align-content: center;
+                padding: 0 .32rem;
+                width: 100%;
+                height: 0.88rem;
+                background: $bg05;
+                line-height: .88rem;
+                input {
+                    width: 5.5rem;
+                    background: none;
+                    &::placeholder {
+                        font-size: $f26;
+                    }
+                }
+                span {
+                    font-size: $f22;
+                    font-weight: bold;
+                }
+            }
+            &-tip {
+                padding: .3rem 0 0.4rem;
+                font-size: $f24;
+                color: $fc02;
+            }
+        }
+        &-item3 {
+            padding: .25rem .2rem 0;
+            width: 100%;
+            height: 1.2rem;
+            background: $bg05;
+            textarea {
+                width: 100%;
+                height: 100%;
+            }
+        }
         &-sub-item {
             display: flex;
             span {
@@ -230,6 +317,20 @@ import { setTimeout } from 'timers';
             .icon-mobile {
                 margin: .05rem 0 0 .16rem;
                 font-size: $f20;
+            }
+        }
+        &-btn {
+            margin-top: 0.52rem;
+            width: 100%;
+            height: 0.88rem;
+            line-height: .88rem;
+            text-align: center;
+            font-size: $f32;
+            color: $fc08;
+            background: $fc07;
+            border-radius: .05rem;
+            &:active {
+                opacity: .8;
             }
         }
     }

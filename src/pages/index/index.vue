@@ -182,13 +182,13 @@ export default {
             font-size:$f24 ;
             color: $fc02 ;
             span{
-                color: #000000;
+                color: $fc06;
             }
         }
         .content{
-            background:$bg01;
+            background: $bg01;
             box-sizing: border-box;
-            padding: 0 0.4rem;
+            padding: 0 .3rem;
         }
     }
 </style>

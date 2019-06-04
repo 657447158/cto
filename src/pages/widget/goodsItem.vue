@@ -46,7 +46,7 @@
        box-sizing: border-box;
        padding: .2rem .3rem .24rem;
        background: #ffffff;
-       margin-top: 0.3rem;
+       margin-top: 0.2rem;
        .title{
            display: flex;
            justify-content: space-between;
