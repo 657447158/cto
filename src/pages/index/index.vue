@@ -23,7 +23,7 @@
                 :class="navIndex === index && 'active'"
                 @click="chooseNav(index)"
             >
-                {{item}}
+                {{item.coinName}}
             </div>
             <div class="nav-item" @click="showMoreModal">更多 <span class="delta"></span></div>
             <div class="nav-item" @click="showChooseModal">筛选 <span class="delta"></span></div>
@@ -37,7 +37,7 @@
         </div>
         <!-- 更多弹窗 -->
         <cto-modal :show="moreShow">
-            <More :show="moreShow" @hide="hide" />
+            <More :show="moreShow" :list="regionCoinsList" @hide="hide" />
         </cto-modal>
         <!-- 筛选弹窗 -->
         <cto-modal :show="chooseShow">
@@ -49,6 +49,7 @@
 import GoodsItem from '../widget/goodsItem';
 import More from './more'
 import Choose from './choose'
+import Ajax from '@/service'
 
 export default {
     components: {
@@ -62,11 +63,46 @@ export default {
             chooseShow: false,
             tabList: ['我要买币', '我要卖币'],
             tabIndex: 0,
-            navList: ['BCV', 'HRC', 'PAN', 'SEED'],
-            navIndex: 0
+            navList: [],
+            navIndex: 0,
+            regionCoinsList: []
         }
     },
+    created () {
+        this.getHotCoin()
+        this.getRegionCoin()
+    },
     methods: {
+        /**
+         * 请求数据
+         */
+        // 获取热门币种
+        getHotCoin () {
+            Ajax.getHotCoin()
+                .then(res => {
+                    if (res.code === '0000') {
+                        this.navList = res.data
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        },
+        // 获取币种区域
+        getRegionCoin () {
+            Ajax.getRegionCoin()
+                .then(res => {
+                    if (res.code === '0000') {
+                        this.regionCoinsList = res.data
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        },
+        /**
+         * 交互函数
+         */
         // 切换tab（买卖币）
         chooseTab (index) {
             this.tabIndex = index

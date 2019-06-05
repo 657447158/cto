@@ -146,7 +146,10 @@ export default {
     .order {
         padding-bottom: 1.02rem;
         &-tab {
+            position: fixed;
+            top: 0;
             padding: 0 .66rem;
+            width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -176,7 +179,7 @@ export default {
             }
         }
         &-list {
-            padding: 0 .3rem;
+            padding: .88rem .3rem;
             &-item {
                 margin-top: 0.2rem;
                 padding: 0 .32rem;

@@ -76,7 +76,7 @@
             <div class="create-item3">
                 <textarea placeholder="请输入备注信息(最多输入20个字符)"></textarea>
             </div>
-            <div class="create-btn">创建挂单</div>
+            <div class="create-btn" @click="createOrder">创建挂单</div>
         </div>
         <!-- 币种选择modal -->
         <cto-modal :show="show" class="coin-type" dir="bottom" @hide="cancel">
@@ -97,6 +97,7 @@
 </template>
 <script>
     import Swiper from '@/utils/swiper'
+    import Dialog from '@/components/dialog'
     export default {
         data () {
             return {
@@ -136,6 +137,13 @@
             confirm () {
                 this.iconType = document.querySelector('.swiper-slide-active').innerHTML
                 this.show = false
+            },
+            // 创建订单
+            createOrder () {
+                Dialog({
+                    title: '确认创建挂单吗?',
+                    content: '(创建后将不可修改)'
+                })
             }
         }
     }

@@ -1,9 +1,9 @@
 <template>
   <transition enter-active-class="animation-fade-in" leave-active-class="animation-fade-out">
-  <div class="daq-toast" v-if="show">
-    <div class="daq-toast-mask"></div>
-    <div class="daq-toast-wrap" :class="icon.className">
-      <span class="icon ued-mobile" v-if="icon.html" v-html="icon.html"></span>
+  <div class="cto-toast" v-if="show">
+    <div class="cto-toast-mask"></div>
+    <div class="cto-toast-wrap" :class="icon.className">
+      <span class="icon icon-mobile" v-if="icon.html" v-html="icon.html"></span>
       <span class="text" v-if="icon.title">{{icon.title}}</span>
     </div>
   </div>
@@ -11,7 +11,7 @@
 </template>
 <script>
 export default {
-  name: 'daq-toast',
+  name: 'cto-toast',
   props: {
     show: Boolean,
     type: {
@@ -30,7 +30,7 @@ export default {
       let className = ''
       switch (this.type) {
         case 'loading':
-          html = '&#xe659;'
+          html = '&#xe65c;'
           title = '数据加载中'
           className = 'loading'
           break
@@ -60,7 +60,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .daq-toast{
+  .cto-toast{
     position:fixed;
     left:0;
     right:0;
@@ -91,9 +91,10 @@ export default {
     }
     .text{
       display:block;
-      font-size:$f28;
+      font-size: $f28;
+      color: $fc08;
     }
-    .ued-mobile{
+    .icon-mobile{
       display:inline-block;
       width:1rem;
       height:1rem;
@@ -101,6 +102,7 @@ export default {
       text-align: center;
       border-radius:50%;
       font-size:.7rem;
+      color: $fc08;
     }
     .loading,
     .sucess,
@@ -108,7 +110,7 @@ export default {
       padding:.4rem 0;
     }
     .loading{
-      .ued-mobile{
+      .icon-mobile{
         animation: rotate linear 3s infinite
       }
       @keyframes rotate {

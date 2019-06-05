@@ -1,34 +1,16 @@
 <template>
     <div class="more">
         <div class="more-tab">
-            <span>创新区</span>
-            <span>分红区</span>
-            <span>优质区</span>
-            <span>稳定区</span>
+            <span v-for="(item, index) in list" :key="index">{{item.region}}</span>
         </div>
         <ul class="more-list">
-            <li>
-                <p><span class="img-box"></span><span class="name">BCV</span></p>
-                <p><span class="img-box"></span><span class="name">TAC</span></p>
-                <p><span class="img-box"></span><span class="name">EMAN</span></p>
-                <p><span class="img-box"></span><span class="name">HT</span></p>
-                <p><span class="img-box"></span><span class="name">ULA</span></p>
-                <p><span class="img-box"></span><span class="name">CMDT</span></p>
-            </li>
-            <li>
-                <p><span class="img-box"></span><span class="name">SEED</span></p>
-                <p><span class="img-box"></span><span class="name">ABCB</span></p>
-                <p><span class="img-box"></span><span class="name">WL</span></p>
-            </li>
-            <li>
-                <p><span class="img-box"></span><span class="name">BTC</span></p>
-                <p><span class="img-box"></span><span class="name">ETH</span></p>
-                <p><span class="img-box"></span><span class="name">EOS</span></p>
-            </li>
-            <li>
-                <p><span class="img-box"></span><span class="name">HKDT</span></p>
-                <p><span class="img-box"></span><span class="name">USDT</span></p>
-                <p><span class="img-box"></span><span class="name">USDTDSFS</span></p>
+            <li v-for="(item, index) in list" :key="index">
+                <p v-for="coin in item.regionCoins" :key="coin.coinName">
+                    <span class="img-box">
+                        <img :src="coin.coinImage" :alt="coin.coinName">
+                    </span>
+                    <span class="name">{{coin.coinName}}</span>
+                </p>
             </li>
         </ul>
         <div class="more-btn" @click="hide">取消</div>
@@ -37,7 +19,8 @@
 <script>
     export default {
         props: {
-            show: Boolean
+            show: Boolean,
+            list: Array
         },
         methods: {
             hide () {
@@ -60,11 +43,11 @@
             }
         }
         &-list {
-            padding-top: 0.2rem;
             display: flex;
-            height: 7.5rem;
+            max-height: 7.5rem;
         }
         li {
+            padding-top: 0.2rem;
             width: 25%;
             border-right: 1px solid $border01;
             overflow: auto;
@@ -81,7 +64,7 @@
             height: 0.46rem;
             border: 2px solid $border01;
             border-radius: 50%;
-            background: $fc02;
+            overflow: hidden;
         }
         .name {
             font-size: $f20;
