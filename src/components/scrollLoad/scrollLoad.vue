@@ -69,22 +69,22 @@
                         if (data.page) {
                             total = data.page.total
                         }
-                        this.dataList(data.datas, total, data)
-                            if (!data.page) {
-                                this.noData = true
-                                this.noMore = false
-                                return false
-                            } else {
-                                this.noData = false
-                                // 总页数
-                                if (this.page === 1) {
-                                    this.totalPage = data.page.totalPage
-                                }
-                                // 没有更多数据
-                                if (this.totalPage === this.page && this.isScroll) {
-                                    this.noMore = true
-                                }
+                        this.dataList(data.data, total, data)
+                        if (!data.page) {
+                            this.noData = true
+                            this.noMore = false
+                            return false
+                        } else {
+                            this.noData = false
+                            // 总页数
+                            if (this.page === 1) {
+                                this.totalPage = data.page.totalPage
                             }
+                            // 没有更多数据
+                            if (this.totalPage === this.page && this.isScroll) {
+                                this.noMore = true
+                            }
+                        }
                     })
                 }
             },

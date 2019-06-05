@@ -31,12 +31,12 @@
             </div>
             <div class="index-current-price">{{coinName}}当前的价格：<span>¥1.0000</span></div>
         </div>
-        <div class="content">
-            <goods-item/>
-            <goods-item/>
-            <goods-item/>
-            <goods-item/>
-        </div>
+        <cto-scroll-load @list="getList" requestName="getBuyOrders" :params="params">
+            <div class="content" slot="list">
+                <goods-item :list="coinList" />
+            </div>
+        </cto-scroll-load>
+        
         <!-- 更多弹窗 -->
         <cto-modal :show="moreShow">
             <More :show="moreShow" :list="regionCoinsList" @hide="hide" />
@@ -64,18 +64,23 @@ export default {
             moreShow: false,
             chooseShow: false,
             tabList: ['我要买币', '我要卖币'],
-            tabIndex: 1,
-            tradeType: 2,   // 1买币，2卖币
+            tabIndex: 0,
+            tradeType: 1,   // 1买币，2卖币
             navList: [],
             navIndex: 0,
             coinName: '',
-            regionCoinsList: []
+            regionCoinsList: [],
+            coinList: [],
+            params: {
+                tradeType: 1,
+                coinId: 2
+            }
         }
     },
     created () {
         this.getHotCoin()
         this.getRegionCoin()
-        this.getBuyOrders()
+        // this.getBuyOrders()
     },
     methods: {
         /**
@@ -107,17 +112,8 @@ export default {
                 })
         },
         // 获取买卖币列表
-        getBuyOrders () {
-            Ajax.getBuyOrders({
-                tradeType: this.tradeType,
-                coinId: 1,
-                wxPayFlag: 1,
-                aliPayFlag: 1,
-                bankPayFlag: 1,
-                sortType: 1
-            }).then(res => {
-                console.log(res)
-            })
+        getList (value) {
+            this.coinList = this.coinList.concat(value)
         },
         /**
          * 交互函数

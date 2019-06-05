@@ -1,65 +1,65 @@
 <template>
     <!-- 个人中心-我的挂单 -->
-    <ul class="my-order">
-        <li
-            class="my-order-item"
-            v-for="item in orderList"
-            :key="item.id"
-        >
-            <div class="top">
-                <span class="top-name">{{item.title}}</span>
-                <span class="top-time">{{item.createDate}}</span>
-                <div class="top-box">
-                    <span class="switch" :class="checked ? 'checked' : 'unchecked'"></span>
-                    <!-- <input id="status" type="checkbox" class="switch" /> -->
-                    <label for="status">
-                        <span
-                            class="status-switch"
-                            :class="statusIndex === index && 'active'"
-                            v-for="(item, index) in status"
-                            :key="index"
-                            @click="confirm(index)"
-                        >{{item}}</span>
-                    </label>
+    <cto-scroll-load @list="getList" requestName="listMarketOrder">
+        <ul class="my-order" slot="list">
+            <li
+                class="my-order-item"
+                v-for="item in orderList"
+                :key="item.id"
+            >
+                <div class="top">
+                    <span class="top-name">{{item.title}}</span>
+                    <span class="top-time">{{item.createDate}}</span>
+                    <div class="top-box">
+                        <span class="switch" :class="checked ? 'checked' : 'unchecked'"></span>
+                        <label for="status">
+                            <span
+                                class="status-switch"
+                                :class="statusIndex === index && 'active'"
+                                v-for="(item, index) in status"
+                                :key="index"
+                                @click="confirm(index)"
+                            >{{item}}</span>
+                        </label>
+                    </div>
                 </div>
-            </div>
-            <div class="content">
-                <div class="content-box">
-                    <span>单价</span>
-                    <span><i>一口价</i><span>￥{{item.price}}</span></span>
+                <div class="content">
+                    <div class="content-box">
+                        <span>单价</span>
+                        <span><i>一口价</i><span>￥{{item.price}}</span></span>
+                    </div>
+                    <div class="content-box">
+                        <span>剩余</span>
+                        <span>1000.0000 {{item.coinName}}</span>
+                    </div>
+                    <div class="content-box">
+                        <span>已成交</span>
+                        <span>{{item.dealNum}} {{item.coinName}}</span>
+                    </div>
+                    <div class="content-box">
+                        <span>限额</span>
+                        <span>￥{{item.minQuota}} - {{item.maxQuota}}</span>
+                    </div>
+                    <div class="content-box">
+                        <span>备注</span>
+                        <span>{{item.remark}}</span>
+                    </div>
                 </div>
-                <div class="content-box">
-                    <span>剩余</span>
-                    <span>1000.0000 {{item.coinName}}</span>
+                <div class="bottom">
+                    <div class="bottom-box">
+                        <span class="icon-mobile wechat" v-if="item.wxPayFlag === 1">&#xe81f;</span>
+                        <span class="icon-mobile alipay" v-if="item.aliPayFlag === 1">&#xe820;</span>
+                        <span class="icon-mobile card" v-if="item.bankPayFlag === 1">&#xe608;</span>
+                    </div>
+                    <span class="cancel">撤销</span>
                 </div>
-                <div class="content-box">
-                    <span>已成交</span>
-                    <span>{{item.dealNum}} {{item.coinName}}</span>
-                </div>
-                <div class="content-box">
-                    <span>限额</span>
-                    <span>￥{{item.minQuota}} - {{item.maxQuota}}</span>
-                </div>
-                <div class="content-box">
-                    <span>备注</span>
-                    <span>{{item.remark}}</span>
-                </div>
-            </div>
-            <div class="bottom">
-                <div class="bottom-box">
-                    <span class="icon-mobile wechat" v-if="item.wxPayFlag === 1">&#xe81f;</span>
-                    <span class="icon-mobile alipay" v-if="item.aliPayFlag === 1">&#xe820;</span>
-                    <span class="icon-mobile card" v-if="item.bankPayFlag === 1">&#xe608;</span>
-                </div>
-                <span class="cancel">撤销</span>
-            </div>
-        </li>
-    </ul>
+            </li>
+        </ul>
+    </cto-scroll-load>
+
 </template>
 <script>
     import Dialog from '@/components/dialog'
-    import Ajax from '@/service'
-import { close } from 'fs';
     export default {
         data () {
             return {
@@ -69,22 +69,10 @@ import { close } from 'fs';
                 orderList: []
             }
         },
-        created () {
-            this.getMyOrderList()
-        },
         methods: {
             // 获取我的挂单列表数据
-            getMyOrderList () {
-                Ajax.listMarketOrder()
-                    .then(res => {
-                        console.log(res)
-                        if (res.code === '0000') {
-                            this.orderList = res.data
-                        }
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
+            getList (value) {
+                this.orderList = this.orderList.concat(value)
             },
             confirm (index) {
                 let _this = this

@@ -1,44 +1,56 @@
 <template>
     <div class="goods">
-        <div class="title">
-            <div class="title-left">
-                <span class="img-box">
-                    <img src="" alt="">
-                </span>
-                <span>支持信用卡花呗</span>
+        <div
+            v-for="item in list"
+            :key="item.id"
+        >
+            <div class="title">
+                <div class="title-left">
+                    <span class="img-box">
+                        <img :src="item.headImage" />
+                    </span>
+                    <span>{{item.nickName || '龙猫用户'}}</span>
+                </div>
+                <div class="title-right">
+                    996单 | 97%
+                </div>
             </div>
-            <div class="title-right">
-                996单 | 97%
+            <div class="count">
+                <div class="count-left">
+                    数量 <span>1500.0000 SEED</span>
+                </div>
+                <div class="count-right">
+                    单价
+                </div>
             </div>
-        </div>
-        <div class="count">
-            <div class="count-left">
-                数量 <span>1500.0000 SEED</span>
+            <div class="count">
+                <div class="count-left">
+                    限额 <span>¥30.00-1433.33</span>
+                </div>
+                <div class="count-right price">
+                    ¥0.995
+                </div>
             </div>
-            <div class="count-right">
-                单价
-            </div>
-        </div>
-         <div class="count">
-            <div class="count-left">
-                限额 <span>¥30.00-1433.33</span>
-            </div>
-            <div class="count-right price">
-                ¥0.995
-            </div>
-        </div>
-        <div class="buyorsell">
-            <div class="buyorsell-left">
-                <span class="icon-mobile big vx" >&#xe81f;</span>
-                <span class="icon-mobile big zfb" >&#xe820;</span>
-                <span class="icon-mobile big yhk" >&#xe608;</span>
-            </div>
-            <div class="buyorsell-right">
-                出售
+            <div class="buyorsell">
+                <div class="buyorsell-left">
+                    <span class="icon-mobile big vx" >&#xe81f;</span>
+                    <span class="icon-mobile big zfb" >&#xe820;</span>
+                    <span class="icon-mobile big yhk" >&#xe608;</span>
+                </div>
+                <div class="buyorsell-right">
+                    出售
+                </div>
             </div>
         </div>
     </div>
 </template>
+<script>
+export default {
+    props: {
+        list: Array
+    }
+}
+</script>
 <style lang="scss" scoped>
     .goods {
        border-radius: .2rem;
@@ -60,7 +72,6 @@
                     height: 0.5rem;
                     border-radius: 50%;
                     margin-right:0.2rem;
-                    background: #999;
                 }
            }
            .title-right{
