@@ -3,7 +3,7 @@
         <div class="title">
             <div class="title-left">
                 <span class="img-box">
-                    <img src="https://cdn.duitang.com/uploads/item/201610/03/20161003000301_Wfm5X.jpeg" alt="">
+                    <img src="" alt="">
                 </span>
                 <span>支持信用卡花呗</span>
             </div>

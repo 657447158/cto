@@ -1,34 +1,36 @@
 <template>
     <div class="index">
-        <router-link
-            class="icon-mobile go-btn"
-            to="create-order"
-        >&#xe65b;</router-link>
-        <div class="index-tab">
-            <div
-                class="index-tab-item"
-                v-for="(item, index) in tabList"
-                :key="index"
-                :class="tabIndex === index && 'active'"
-                @click="chooseTab(index)"
-            >
-                {{item}}
+        <div class="index-fixed">
+            <router-link
+                class="icon-mobile go-btn"
+                to="create-order"
+            >&#xe65b;</router-link>
+            <div class="index-tab">
+                <div
+                    class="index-tab-item"
+                    v-for="(item, index) in tabList"
+                    :key="index"
+                    :class="tabIndex === index && 'active'"
+                    @click="chooseTab(index)"
+                >
+                    {{item}}
+                </div>
             </div>
-        </div>
-        <div class="index-nav">
-            <div
-                class="nav-item"
-                v-for="(item, index) in navList"
-                :key="index"
-                :class="navIndex === index && 'active'"
-                @click="chooseNav(index)"
-            >
-                {{item.coinName}}
+            <div class="index-nav">
+                <div
+                    class="nav-item"
+                    v-for="(item, index) in navList"
+                    :key="index"
+                    :class="navIndex === index && 'active'"
+                    @click="chooseNav(index)"
+                >
+                    {{item.coinName}}
+                </div>
+                <div class="nav-item" @click="showMoreModal">更多 <span class="delta"></span></div>
+                <div class="nav-item" @click="showChooseModal">筛选 <span class="delta"></span></div>
             </div>
-            <div class="nav-item" @click="showMoreModal">更多 <span class="delta"></span></div>
-            <div class="nav-item" @click="showChooseModal">筛选 <span class="delta"></span></div>
+            <div class="index-current-price">{{coinName}}当前的价格：<span>¥1.0000</span></div>
         </div>
-        <div class="index-current-price">SEED当前的价格：<span>¥1.0000</span></div>
         <div class="content">
             <goods-item/>
             <goods-item/>
@@ -62,15 +64,18 @@ export default {
             moreShow: false,
             chooseShow: false,
             tabList: ['我要买币', '我要卖币'],
-            tabIndex: 0,
+            tabIndex: 1,
+            tradeType: 2,   // 1买币，2卖币
             navList: [],
             navIndex: 0,
+            coinName: '',
             regionCoinsList: []
         }
     },
     created () {
         this.getHotCoin()
         this.getRegionCoin()
+        this.getBuyOrders()
     },
     methods: {
         /**
@@ -82,6 +87,7 @@ export default {
                 .then(res => {
                     if (res.code === '0000') {
                         this.navList = res.data
+                        this.coinName = this.navList[0] && this.navList[0].coinName
                     }
                 })
                 .catch(err => {
@@ -100,12 +106,30 @@ export default {
                     console.log(err)
                 })
         },
+        // 获取买卖币列表
+        getBuyOrders () {
+            Ajax.getBuyOrders({
+                tradeType: this.tradeType,
+                coinId: 1,
+                wxPayFlag: 1,
+                aliPayFlag: 1,
+                bankPayFlag: 1,
+                sortType: 1
+            }).then(res => {
+                console.log(res)
+            })
+        },
         /**
          * 交互函数
          */
         // 切换tab（买卖币）
         chooseTab (index) {
             this.tabIndex = index
+            if (index === 0) {
+                this.tradeType = 1
+            } else {
+                this.tradeType = 2
+            }
         },
         // 切换nav
         chooseNav (index) {
@@ -123,11 +147,16 @@ export default {
         }
     }
 }
-    
 </script>
 <style lang="scss" scoped>
     .index {
         padding-bottom: 1.02rem;
+        &-fixed {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 2.34rem;
+        }
         .go-btn {
             display: block;
             position: fixed;
@@ -174,7 +203,6 @@ export default {
             justify-content: space-evenly;
             align-items: center;
             height: 0.9rem;
-            // padding: 0.6rem 0 ;
             background: $fc08;
             border-bottom: 1px solid $border01 ;
             .nav-item{
@@ -224,7 +252,7 @@ export default {
         .content{
             background: $bg01;
             box-sizing: border-box;
-            padding: 0 .3rem;
+            padding: 2.34rem .3rem 0;
         }
     }
 </style>

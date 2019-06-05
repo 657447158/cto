@@ -1,10 +1,14 @@
 <template>
     <!-- 个人中心-我的挂单 -->
     <ul class="my-order">
-        <li class="my-order-item">
+        <li
+            class="my-order-item"
+            v-for="item in orderList"
+            :key="item.id"
+        >
             <div class="top">
-                <span class="top-name">购买BVC</span>
-                <span class="top-time">2019-06-05 11:24:22</span>
+                <span class="top-name">{{item.title}}</span>
+                <span class="top-time">{{item.createDate}}</span>
                 <div class="top-box">
                     <span class="switch" :class="checked ? 'checked' : 'unchecked'"></span>
                     <!-- <input id="status" type="checkbox" class="switch" /> -->
@@ -22,27 +26,31 @@
             <div class="content">
                 <div class="content-box">
                     <span>单价</span>
-                    <span><i>一口价</i><span>￥0.0835</span></span>
+                    <span><i>一口价</i><span>￥{{item.price}}</span></span>
                 </div>
                 <div class="content-box">
                     <span>剩余</span>
-                    <span>1000.0000 BCV</span>
+                    <span>1000.0000 {{item.coinName}}</span>
                 </div>
                 <div class="content-box">
                     <span>已成交</span>
-                    <span>0.0000 BCV</span>
+                    <span>{{item.dealNum}} {{item.coinName}}</span>
                 </div>
                 <div class="content-box">
                     <span>限额</span>
-                    <span>￥10 - 1000.00</span>
+                    <span>￥{{item.minQuota}} - {{item.maxQuota}}</span>
                 </div>
                 <div class="content-box">
                     <span>备注</span>
-                    <span>收款收款</span>
+                    <span>{{item.remark}}</span>
                 </div>
             </div>
             <div class="bottom">
-                <span class="icon-mobile">&#xe820;</span>
+                <div class="bottom-box">
+                    <span class="icon-mobile wechat" v-if="item.wxPayFlag === 1">&#xe81f;</span>
+                    <span class="icon-mobile alipay" v-if="item.aliPayFlag === 1">&#xe820;</span>
+                    <span class="icon-mobile card" v-if="item.bankPayFlag === 1">&#xe608;</span>
+                </div>
                 <span class="cancel">撤销</span>
             </div>
         </li>
@@ -50,15 +58,34 @@
 </template>
 <script>
     import Dialog from '@/components/dialog'
+    import Ajax from '@/service'
+import { close } from 'fs';
     export default {
         data () {
             return {
                 checked: false,
                 status: ['下架', '上架'],
-                statusIndex: 0
+                statusIndex: 0,
+                orderList: []
             }
         },
+        created () {
+            this.getMyOrderList()
+        },
         methods: {
+            // 获取我的挂单列表数据
+            getMyOrderList () {
+                Ajax.listMarketOrder()
+                    .then(res => {
+                        console.log(res)
+                        if (res.code === '0000') {
+                            this.orderList = res.data
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            },
             confirm (index) {
                 let _this = this
                 if (index === 0) {
@@ -174,8 +201,17 @@
             padding: .36rem 0;
             border-top: 2px solid $border01;
             .icon-mobile {
+                margin-right: .1rem;
                 font-size: $f36;
-                color: $fc07;
+                &.wechat {
+                    color:#69c362;
+                }
+                &.alipay {
+                    color:#61aff7;
+                }
+                &.card {
+                    color: #efcc94;
+                }
             }
             .cancel {
                 width: 1.38rem;
