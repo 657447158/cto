@@ -31,8 +31,9 @@
             </div>
             <div class="index-current-price">{{coinName}}当前的价格：<span>¥1.0000</span></div>
         </div>
+        <!-- 滚动加载 -->
         <cto-scroll-load @list="getList" requestName="getBuyOrders" :params="params">
-            <div class="content" slot="list">
+            <div class="content" slot="list" v-if="coinList.length > 0">
                 <goods-item :list="coinList" />
             </div>
         </cto-scroll-load>

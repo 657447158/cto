@@ -35,7 +35,7 @@
         data () {
             return {
                 // 当前页数
-                page: 0,
+                page: 1,
                 // 总页数
                 totalPage: 1,
                 // 是否允许加载
@@ -62,7 +62,8 @@
                     this.flag = false
                     Ajax[this.requestName](Object.assign({}, this.parameter, {
                         currentPage: this.page
-                    })).then((data) => {
+                    })).then(data => {
+                        console.log(data)
                         // 允许加载
                         this.flag = true
                         let total = 0
@@ -76,12 +77,7 @@
                             return false
                         } else {
                             this.noData = false
-                            // 总页数
-                            if (this.page === 1) {
-                                this.totalPage = data.page.totalPage
-                            }
-                            // 没有更多数据
-                            if (this.totalPage === this.page && this.isScroll) {
+                            if (data.page.isLastPage) {
                                 this.noMore = true
                             }
                         }
@@ -176,9 +172,9 @@
     .cto-no-data-text {
         text-align: center;
         line-height: 0.88rem;
-        color: $fc08;
+        color: $fc03;
         font-size: $f22;
-        background: $bg02;
+        background: $bg01;
         span {
             position: relative;
             display: inline-block;
