@@ -3,49 +3,155 @@
     <div class="itembox p03">
       <div class="title">
         <div class="title-left">
-          <img src="http://img1.imgtn.bdimg.com/it/u=1107314399,2602653806&fm=26&gp=0.jpg" alt>
-          支持信用卡花呗
+          <img :src="detail.headImage" alt>
+          {{detail.nickName}}
         </div>
-        <div class="title-right">2182单|97%</div>
+        <div class="title-right">{{detail.dealNum}}单 | {{detail.dealRatio}}</div>
       </div>
       <div class="item">
         <span class="item-title">单价</span>
-        <span class="item-info">¥0.99999</span>
+        <span class="item-info">¥{{detail.price}}</span>
       </div>
       <div class="item">
         <span class="item-title">数量</span>
-        <span class="item-info">10000000.0000BCV</span>
+        <span class="item-info">{{detail.totalNum}} {{detail.coinName}}</span>
       </div>
       <div class="item">
         <span class="item-title">限额</span>
-        <span class="item-info">¥35.00-900.00</span>
+        <span class="item-info">¥{{detail.minQuota}}-{{detail.maxQuota}}</span>
       </div>
     </div>
     <div class="itembox p03 buybox">
       <div class="buyinfo buyamount">
-        <input type="number" placeholder="0.00">
-        <p>
-          输入买入数量
-          <span>BCV</span>
-        </p>
-        <p>399.0000-1222222.0000</p>
+        <input type="number" placeholder="0.00" v-model="buyNum" @focus="numFocusFn">
+        <p>输入买入数量<span>{{detail.coinName}}</span></p>
+        <p>{{detail.restNum || 0}}-{{detail.totalNum}}</p>
       </div>
       <span class="icon-mobile change">&#xe823;</span>
       <div class="buyinfo buyprice">
-        <input type="number" value="9999" placeholder="0.00">
-        <p>
-          输入买入金额
-          <span>CNY</span>
-        </p>
-        <p>399.00-1229.00</p>
+        <input type="number" placeholder="0.00" v-model="buySum" @focus="sumFocusFn">
+        <p>输入买入金额<span>CNY</span></p>
+        <p>{{detail.minQuota}}-{{detail.maxQuota}}</p>
       </div>
     </div>
-    <div class="btnbox p03">
-      <button class="cancle">取消（50）</button>
-      <button class="sure">立即买入</button>
+    <div class="btnbox p03" v-if="buyFlag">
+      <router-link tag="div" class="cancle" to="/index">取消({{time}})</router-link>
+      <div class="sure" @click="buyNow">立即买入</div>
+    </div>
+		<div class="btnbox p03" v-else>
+      <div class="disabeld">已超出购买时间</div>
     </div>
   </div>
 </template>
+<script>
+import Ajax from '@/service'
+import Toast from '@/components/toast'
+
+export default {
+	data () {
+		return {
+			otcBuyId: this.$route.query.id,
+			detail: {},
+			time: 60,
+			timer: null,
+			buyNum: '',
+			buySum: '',
+			buyFlag: true,
+			// 买入数量输入框聚焦状态
+			numFocus: false,
+			// 买入金额输入框聚焦状态
+			sumFocus: false,
+		}
+	},
+	created () {
+		this.getDetail()
+		this.timer = setInterval(() => {
+			if (this.time > 0) {
+				this.time--
+			} else {
+				this.buyFlag = false
+				clearInterval(this.timer)
+				this.timer = null
+			}
+		}, 1000);
+	},
+	methods: {
+		getDetail () {
+			Ajax.buySomeCoinDetail({
+				otcBuyId: this.otcBuyId
+			}).then(res => {
+				if (res.code === '0000') {
+					this.detail = res.data
+				}
+			}).catch(() => {
+			})
+		},
+		// 立即买入
+		buyNow () {
+			if (!this.buyNum || (this.buyNum < this.detail.restNum && this.numFocus)) {
+				Toast({
+					message: `请至少输入 ${this.detail.restNum} ${this.detail.coinName}`
+				})
+				return
+			}
+			if (this.buyNum > this.detail.totalNum && this.numFocus) {
+				Toast({
+					message: `最多可输入 ${this.detail.totalNum} ${this.detail.coinName}`
+				})
+				return
+			}
+			if (this.buySum < this.detail.minQuota && this.sumFocus) {
+				Toast({
+					message: `最少需输入 ${this.detail.minQuota} 元`
+				})
+				return
+			}
+			if (this.buySum > this.detail.maxQuota && this.numFocus) {
+				Toast({
+					message: `最多可输入 ${this.detail.maxQuota} 元`
+				})
+				return
+			}
+		},
+		// 买入数量输入框聚焦事件
+		numFocusFn () {
+			this.numFocus = true
+			this.sumFocus = false
+		},
+		// 买入数量输入框聚焦事件
+		sumFocusFn () {
+			this.numFocus = false
+			this.sumFocus = true
+		}
+	},
+	watch: {
+		buyNum (val) {
+			if (!val) {
+				this.buySum = ''
+				return
+			}
+			if (this.numFocus) {
+				// 买入数量聚焦
+				this.buySum = (val * this.detail.price).toFixed(4)
+			}
+		},
+		buySum (val) {
+			if (!val) {
+				this.buyNum = ''
+				return
+			}
+			if (this.sumFocus) {
+				// 买入金额聚焦时
+				this.buyNum = (val / this.detail.price).toFixed(4)
+			}
+		}
+	},
+	destroyed () {
+		clearInterval(this.timer)
+		this.timer = null
+	}
+}
+</script>
 <style lang="scss" scoped>
 .trade {
   background: $bg05;
@@ -53,32 +159,47 @@
     padding: 0 0.3rem;
   }
   .btnbox{
-      margin-top: 0.6rem;
-      display: flex;
-      justify-content: space-between;
-      height: 0.88rem;
-      .cancle{
-          border: 1px solid $fc14   ;
-          background: $bg04;
-          height: 100%;
-          width: 1.8rem;
-          outline: none;
-          font-size: $f28  ;
-          color: $fc02   ;
-          text-align: center;
-          line-height: 100%;
-          border-radius: 4px;
-      }
-      .sure{
-          height: 100%;
-          width: 4.9rem;
-          background: $fc07  ;
-          font-size: $f28  ;
-          color: $fc08   ;
-          text-align: center;
-          line-height: 100%;
-          border-radius: 4px;
-      }
+		margin-top: 0.6rem;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		height: 0.88rem;
+		line-height: .88rem;
+		font-size: $f32;
+		.cancle{
+			border: 1px solid $fc14;
+			background: $bg04;
+			height: 100%;
+			width: 1.8rem;
+			color: $fc02;
+			text-align: center;
+			border-radius: 4px;
+			&:active {
+				opacity: .8;
+			}
+		}
+		.sure{
+			height: 100%;
+			width: 4.9rem;
+			background: $fc07;
+			color: $fc08;
+			text-align: center;
+			border-radius: 4px;
+			&:active {
+				opacity: .8;
+			}
+		}
+		.disabeld {
+			width: 100%;
+			height: 100%;
+			background: $bg04;
+			border: 1px solid $fc14;
+			text-align: center;
+			color: $fc02;
+			&:active {
+				opacity: .8;
+			}
+		}
   }
   .itembox {
     border-top: 0.2rem solid $border02;
@@ -87,7 +208,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      line-height: 0.8rem;
+      line-height: .9rem;
       .item-title {
         font-size: $f30;
         color: $fc03;
@@ -102,7 +223,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.3rem 0;
+      padding: .3rem 0 .2rem;
       .title-left {
         display: flex;
         align-items: center;

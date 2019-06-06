@@ -34,7 +34,7 @@
         <!-- 滚动加载 -->
         <cto-scroll-load @list="getList" requestName="getBuyOrders" :params="params">
             <div class="content" slot="list" v-if="coinList.length > 0">
-                <goods-item :list="coinList" />
+                <goods-item :list="coinList" :btnText="btnText" />
             </div>
         </cto-scroll-load>
         
@@ -66,22 +66,21 @@ export default {
             chooseShow: false,
             tabList: ['我要买币', '我要卖币'],
             tabIndex: 0,
-            tradeType: 1,   // 1买币，2卖币
             navList: [],
             navIndex: 0,
             coinName: '',
             regionCoinsList: [],
             coinList: [],
             params: {
-                tradeType: 1,
+                tradeType: 1, // 1买币，2卖币
                 coinId: 2
-            }
+            },
+            btnText: '购买'
         }
     },
     created () {
         this.getHotCoin()
         this.getRegionCoin()
-        // this.getBuyOrders()
     },
     methods: {
         /**
@@ -121,11 +120,15 @@ export default {
          */
         // 切换tab（买卖币）
         chooseTab (index) {
+            if (this.tabIndex === index) return
             this.tabIndex = index
+            this.coinList = []
             if (index === 0) {
-                this.tradeType = 1
+                this.params.tradeType = 1
+                this.btnText = '购买'
             } else {
-                this.tradeType = 2
+                this.params.tradeType = 2
+                this.btnText = '出售'
             }
         },
         // 切换nav
@@ -246,10 +249,13 @@ export default {
                 color: $fc06;
             }
         }
+        /deep/ .cto-scroll-load {
+            padding-top: 2.34rem;
+        }
         .content{
             background: $bg01;
             box-sizing: border-box;
-            padding: 2.34rem .3rem 0;
+            padding: 0 .3rem;
         }
     }
 </style>

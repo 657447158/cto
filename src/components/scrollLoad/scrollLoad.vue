@@ -2,7 +2,10 @@
     <div class="cto-scroll-load" :class="classname">
         <slot name="list"/>
         <p class="cto-no-data-text" v-if="noMore"><span>没有更多了</span></p>
-        <div class="cto-no-data" v-if="noData">{{noDataText}}</div>
+        <div class="cto-no-data" v-if="noData">
+            <span class="icon-mobile">&#xe825;</span>
+            <span>{{noDataText}}</span>
+        </div>
     </div>
 </template>
 <script>
@@ -63,23 +66,25 @@
                     Ajax[this.requestName](Object.assign({}, this.parameter, {
                         currentPage: this.page
                     })).then(data => {
-                        console.log(data)
                         // 允许加载
                         this.flag = true
                         let total = 0
                         if (data.page) {
                             total = data.page.total
                         }
-                        this.dataList(data.data, total, data)
-                        if (!data.page) {
+                        this.dataList(data.data)
+                        if (data.data.length > 0) {
+                            if (data.page.isLastPage) {
+                                this.noData = false
+                                this.noMore = true
+                                return
+                            }
                             this.noData = true
                             this.noMore = false
                             return false
                         } else {
-                            this.noData = false
-                            if (data.page.isLastPage) {
-                                this.noMore = true
-                            }
+                            this.noData = true
+                            this.noMore = false
                         }
                     })
                 }
@@ -88,8 +93,8 @@
              * [将数据传到父级去]
              * @returns
              */
-            dataList (arr, total, data) {
-                this.$emit('list', arr, total, data)
+            dataList (arr) {
+                this.$emit('list', arr)
             },
             /**
              * [获取滚动条当前的位置]
@@ -169,10 +174,22 @@
     }
 </script>
 <style lang="scss" scoped>
+    .cto-no-data {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 2.6rem;
+        .icon-mobile {
+            margin-bottom: 0.2rem;
+            font-size: 1.2rem;
+            color: $fc02
+        }
+    }
     .cto-no-data-text {
         text-align: center;
         line-height: 0.88rem;
-        color: $fc03;
+        color: $fc02;
         font-size: $f22;
         background: $bg01;
         span {

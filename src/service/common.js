@@ -42,5 +42,15 @@ export default {
             url: proxy + '/api/otc/listMarketOrder',
             params: Object.assign({...params})
         }) 
+    },
+    /**
+     * [我要买/卖币-买入详情]
+     */
+    buySomeCoinDetail (params) {
+        return ajax({
+            type: 'POST',
+            url: proxy + '/	api/otc/buySomeCoinDetail',
+            params: Object.assign({...params})
+        }) 
     }
 }

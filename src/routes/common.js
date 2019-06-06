@@ -78,11 +78,12 @@ const routes = [
             title: '我的挂单'
         },
         component: () => import('../pages/personal/my-order.vue')
-    },{
+    },
+    {
          path: '/trade',
         name: 'trade',
         meta: {
-            title: '我的挂单'
+            title: '购买'
         },
         component: () => import('../pages/index/trade.vue')
     }
