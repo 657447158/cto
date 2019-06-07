@@ -1,10 +1,12 @@
 <template>
     <div class="index">
         <div class="index-fixed">
+            <!-- 创建挂单入口按钮 -->
             <router-link
                 class="icon-mobile go-btn"
                 to="create-order"
             >&#xe65b;</router-link>
+            <!-- 我要买币|我要买币 -->
             <div class="index-tab">
                 <div
                     class="index-tab-item"
@@ -16,20 +18,21 @@
                     {{item}}
                 </div>
             </div>
+            <!-- 币种切换 -->
             <div class="index-nav">
                 <div
                     class="nav-item"
                     v-for="(item, index) in navList"
                     :key="index"
                     :class="navIndex === index && 'active'"
-                    @click="chooseNav(index)"
+                    @click="chooseNav(index, item.coinId, item.coinName, item.coinPrice)"
                 >
                     {{item.coinName}}
                 </div>
                 <div class="nav-item" @click="showMoreModal">更多 <span class="delta"></span></div>
                 <div class="nav-item" @click="showChooseModal">筛选 <span class="delta"></span></div>
             </div>
-            <div class="index-current-price">{{coinName}}当前的价格：<span>¥1.0000</span></div>
+            <div class="index-current-price">{{coinName}}当前的价格：<span>¥{{coinPrice}}</span></div>
         </div>
         <!-- 滚动加载 -->
         <cto-scroll-load @list="getList" requestName="getBuyOrders" :params="params">
@@ -40,11 +43,11 @@
         
         <!-- 更多弹窗 -->
         <cto-modal :show="moreShow">
-            <More :show="moreShow" :list="regionCoinsList" @hide="hide" />
+            <More :show="moreShow" :list="regionCoinsList" @hide="hide" @switchCoinType="switchCoinType" />
         </cto-modal>
         <!-- 筛选弹窗 -->
         <cto-modal :show="chooseShow">
-            <Choose :show="chooseShow" @hide="hide" />
+            <Choose :show="chooseShow" @hide="hide" @chooseType="chooseType" />
         </cto-modal>
     </div>
 </template>
@@ -68,12 +71,19 @@ export default {
             tabIndex: 0,
             navList: [],
             navIndex: 0,
+            // 当前选中的币种名称
             coinName: '',
+            // 当前选中的币种价格
+            coinPrice: 0,
             regionCoinsList: [],
             coinList: [],
             params: {
                 tradeType: 1, // 1买币，2卖币
-                coinId: 2
+                coinId: '',
+                wxPayFlag: 0,
+                aliPayFlag: 0,
+                bankPayFlag: 0,
+                sortType: 1
             },
             btnText: '购买'
         }
@@ -93,6 +103,8 @@ export default {
                     if (res.code === '0000') {
                         this.navList = res.data
                         this.coinName = this.navList[0] && this.navList[0].coinName
+                        this.coinPrice = this.navList[0] && this.navList[0].coinPrice
+                        this.params.coinId = this.navList[0] && this.navList[0].coinId
                     }
                 })
                 .catch(err => {
@@ -131,9 +143,46 @@ export default {
                 this.btnText = '出售'
             }
         },
-        // 切换nav
-        chooseNav (index) {
+        // 切换nav（币种切换）
+        chooseNav (index, id, name, price) {
+            if (this.navIndex === index ) return
             this.navIndex = index
+            this.coinList = []
+            this.coinName = name
+            this.coinPrice = price
+            this.params.coinId = id
+        },
+        // 子组件选择币种（更多弹窗里面）
+        switchCoinType (coinId, coinName, coinPrice, coinImage) {
+            if (this.params.coinId === coinId) return
+            this.coinList = []
+            this.coinName = coinName
+            this.coinPrice = coinPrice
+            this.params.coinId = coinId
+            // 这里对比更多里面的币种是否在热门区域里，没有的话则将热门币种列表的最后一个替换为当前选中的币种
+            for (let i = 0; i < this.navList.length; i++) {
+                if (this.navList[i].coinId === coinId) {
+                    this.navIndex = i
+                    return
+                }
+            }
+            let obj = {
+                coinId: coinId,
+                coinImage: coinImage,
+                coinName: coinName,
+                coinPrice: coinPrice
+            }
+            this.navList[3] = obj
+            this.navIndex = 3
+        },
+        // 子组件选择排序方式（筛选弹窗里面）
+        chooseType (sortType, wxPayFlag, aliPayFlag, bankPayFlag) {
+            if (this.params.sortType === sortType && this.params.wxPayFlag === wxPayFlag && this.params.aliPayFlag === aliPayFlag && this.params.bankPayFlag === bankPayFlag) return
+            this.coinList = []
+            this.params.sortType = sortType
+            this.params.wxPayFlag = wxPayFlag
+            this.params.aliPayFlag = aliPayFlag
+            this.params.bankPayFlag = bankPayFlag
         },
         showMoreModal () {
             this.moreShow = true

@@ -5,7 +5,11 @@
         </div>
         <ul class="more-list">
             <li v-for="(item, index) in list" :key="index">
-                <p v-for="coin in item.regionCoins" :key="coin.coinName">
+                <p
+                    v-for="coin in item.regionCoins"
+                    :key="coin.coinName"
+                    @click="switchCoinType(coin.coinId, coin.coinName, coin.coinPrice, coin.coinImage)"
+                >
                     <span class="img-box">
                         <img :src="coin.coinImage" :alt="coin.coinName">
                     </span>
@@ -24,7 +28,11 @@
         },
         methods: {
             hide () {
-                this.$emit('hide', this.show)
+                this.$emit('hide')
+            },
+            switchCoinType (coinId, coinName, coinPrice) {
+                this.$emit('switchCoinType', coinId, coinName, coinPrice)
+                this.hide()
             }
         }
     }
@@ -68,7 +76,7 @@
         }
         .name {
             font-size: $f20;
-            @include ellipsis(.7rem)
+            @include ellipsis(.9rem)
         }
         &-btn {
             font-size: $f32;

@@ -11,133 +11,76 @@
             >{{item}}</span>
         </div>
         <!-- 订单列表 -->
-        <ul class="order-list">
-            <li class="order-list-item">
-                <div class="top">
-                    <span class="icon-mobile">&#xe822;</span>
-                    <span class="name">购买BCV</span>
-                    <span class="price">￥891.00</span>
-                </div>
-                <div class="content">
-                    <div class="content-item">
-                        <span class="label">卖家</span>
-                        <p class="img-wrap">
-                            <span class="img-box"></span>
-                            <span>支持信用卡花呗</span>
-                        </p>
+        <cto-scroll-load @list="getList" requestName="listMyOrder" :params="params">
+            <ul class="order-list" slot="list">
+                <li
+                    class="order-list-item"
+                    v-for="item in cList"
+                    :key="item.orderId"
+                >
+                    <div class="top">
+                        <span class="icon-mobile">&#xe822;</span>
+                        <span class="name">{{item.title}}</span>
+                        <span class="price">￥{{item.buyMoney}}</span>
                     </div>
-                    <div class="content-item">
-                        <span class="label">数量</span>
-                        <span>9900.0000 BCV</span>
+                    <div class="content">
+                        <div class="content-item">
+                            <span class="label">卖家</span>
+                            <p class="img-wrap">
+                                <span class="img-box"></span>
+                                <span>{{item.nickName}}</span>
+                            </p>
+                        </div>
+                        <div class="content-item">
+                            <span class="label">数量</span>
+                            <span>{{item.buyNum}} {{item.coinName}}</span>
+                        </div>
+                        <div class="content-item">
+                            <span class="label">订单号</span>
+                            <span>{{item.orderId}}</span>
+                        </div>
                     </div>
-                    <div class="content-item">
-                        <span class="label">订单号</span>
-                        <span>01DS55661415486654</span>
+                    <div class="bottom">
+                        <span class="time">{{item.time}}</span>
+                        <span class="state" v-if="item.orderStatus === 1">正在进行</span>
+                        <span class="state" v-else-if="item.orderStatus === 2">已完成</span>
+                        <span class="state" v-else-if="item.orderStatus === 3">已取消</span>
                     </div>
-                </div>
-                <div class="bottom">
-                    <span class="time">三分钟前</span>
-                    <span class="state">已完成</span>
-                </div>
-            </li>
-            <li class="order-list-item">
-                <div class="top">
-                    <span class="icon-mobile">&#xe822;</span>
-                    <span class="name">购买BCV</span>
-                    <span class="price">￥891.00</span>
-                </div>
-                <div class="content">
-                    <div class="content-item">
-                        <span class="label">卖家</span>
-                        <p class="img-wrap">
-                            <span class="img-box"></span>
-                            <span>支持信用卡花呗</span>
-                        </p>
-                    </div>
-                    <div class="content-item">
-                        <span class="label">数量</span>
-                        <span>9900.0000 BCV</span>
-                    </div>
-                    <div class="content-item">
-                        <span class="label">订单号</span>
-                        <span>01DS55661415486654</span>
-                    </div>
-                </div>
-                <div class="bottom">
-                    <span class="time">三分钟前</span>
-                    <span class="state">已完成</span>
-                </div>
-            </li>
-            <li class="order-list-item">
-                <div class="top">
-                    <span class="icon-mobile">&#xe822;</span>
-                    <span class="name">购买BCV</span>
-                    <span class="price">￥891.00</span>
-                </div>
-                <div class="content">
-                    <div class="content-item">
-                        <span class="label">卖家</span>
-                        <p class="img-wrap">
-                            <span class="img-box"></span>
-                            <span>支持信用卡花呗</span>
-                        </p>
-                    </div>
-                    <div class="content-item">
-                        <span class="label">数量</span>
-                        <span>9900.0000 BCV</span>
-                    </div>
-                    <div class="content-item">
-                        <span class="label">订单号</span>
-                        <span>01DS55661415486654</span>
-                    </div>
-                </div>
-                <div class="bottom">
-                    <span class="time">三分钟前</span>
-                    <span class="state">已完成</span>
-                </div>
-            </li>
-            <li class="order-list-item">
-                <div class="top">
-                    <span class="icon-mobile">&#xe822;</span>
-                    <span class="name">购买BCV</span>
-                    <span class="price">￥891.00</span>
-                </div>
-                <div class="content">
-                    <div class="content-item">
-                        <span class="label">卖家</span>
-                        <p class="img-wrap">
-                            <span class="img-box"></span>
-                            <span>支持信用卡花呗</span>
-                        </p>
-                    </div>
-                    <div class="content-item">
-                        <span class="label">数量</span>
-                        <span>9900.0000 BCV</span>
-                    </div>
-                    <div class="content-item">
-                        <span class="label">订单号</span>
-                        <span>01DS55661415486654</span>
-                    </div>
-                </div>
-                <div class="bottom">
-                    <span class="time">三分钟前</span>
-                    <span class="state">已完成</span>
-                </div>
-            </li>
-        </ul>
+                </li>
+            </ul>
+        </cto-scroll-load>
     </div>
 </template>
 <script>
+import { dateDiff } from '@/utils/common'
 export default {
     data () {
         return {
             tabList: ['正在进行', '已完成', '已取消'],
-            tabIndex: 1
+            tabIndex: 1,
+            params: {
+                orderStatus: 2
+            },
+            list: []
+        }
+    },
+    computed: {
+        cList () {
+            return this.list.map(item => {
+                item.time = dateDiff(new Date(item.createDate).getTime())
+                return item
+            })
         }
     },
     methods: {
         changeTab (index) {
+            if (this.tabIndex === index) return
             this.tabIndex = index
+            this.params.orderStatus = index + 1
+            this.list = []
+        },
+        getList (value) {
+            this.list = this.list.concat(value)
         }
     }
 }
@@ -179,7 +122,7 @@ export default {
             }
         }
         &-list {
-            padding: .88rem .3rem;
+            padding: .88rem .3rem 0;
             &-item {
                 margin-top: 0.2rem;
                 padding: 0 .32rem;

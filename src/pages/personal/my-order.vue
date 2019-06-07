@@ -4,22 +4,22 @@
         <ul class="my-order" slot="list">
             <li
                 class="my-order-item"
-                v-for="item in orderList"
+                v-for="(item, orderIndex) in orderList"
                 :key="item.id"
             >
                 <div class="top">
                     <span class="top-name">{{item.title}}</span>
                     <span class="top-time">{{item.createDate}}</span>
                     <div class="top-box">
-                        <span class="switch" :class="checked ? 'checked' : 'unchecked'"></span>
+                        <span class="switch" :class="item.checked ? 'checked' : 'unchecked'"></span>
                         <label for="status">
                             <span
                                 class="status-switch"
-                                :class="statusIndex === index && 'active'"
-                                v-for="(item, index) in status"
+                                :class="item.statusIndex === index && 'active'"
+                                v-for="(s, index) in status"
                                 :key="index"
-                                @click="confirm(index)"
-                            >{{item}}</span>
+                                @click="confirm(orderIndex, index)"
+                            >{{s}}</span>
                         </label>
                     </div>
                 </div>
@@ -63,34 +63,38 @@
     export default {
         data () {
             return {
-                checked: false,
                 status: ['下架', '上架'],
-                statusIndex: 0,
                 orderList: []
             }
         },
         methods: {
             // 获取我的挂单列表数据
             getList (value) {
+                if (value.length === 0) return
+                // 给每条数据加入一个状态
+                value.map(item => {
+                    item.statusIndex = 0
+                    item.checked = false
+                })
                 this.orderList = this.orderList.concat(value)
             },
-            confirm (index) {
+            confirm (orderIndex, index) {
                 let _this = this
                 if (index === 0) {
                     Dialog({
                         title: '暂时下架后，别人无法看到你的挂单',
                         comfirmValue: '暂时下架',
                         comfirmFn: () => {
-                            _this.checked = false
-                            _this.statusIndex = index
+                            _this.orderList[orderIndex].checked = false
+                            _this.orderList[orderIndex].statusIndex = index
                         }
                     })
                 } else {
                     Dialog({
                         title: '确定要上架该挂单么?',
                         comfirmFn: () => {
-                            _this.checked = true
-                            _this.statusIndex = index
+                            _this.orderList[orderIndex].checked = true
+                            _this.orderList[orderIndex].statusIndex = index
                         }
                     })
                 }

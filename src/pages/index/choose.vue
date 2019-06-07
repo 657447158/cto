@@ -3,20 +3,27 @@
         <span class="icon-mobile close" @click="hide">&#xe656;</span>
         <p class="choose-title">排序</p>
         <div class="choose-box">
-            <span class="choose-item choose-item1 active">综合排序</span>
-            <span class="choose-item choose-item1">价格优先</span>
-            <span class="choose-item choose-item1">成本率高</span>
-            <span class="choose-item choose-item1">成交最多</span>
+            <span
+                class="choose-item choose-item1"
+                :class="sortTypeIndex === index && 'active'"
+                v-for="(item, index) in sortTypeList"
+                :key="item.index"
+                @click="chooseSortType(index, item.type)"
+            >{{item.name}}</span>
         </div>
         <p class="choose-title">支付方式</p>
         <div class="choose-box">
-            <span class="choose-item choose-item2 active">微信</span>
-            <span class="choose-item choose-item2 active">支付宝</span>
-            <span class="choose-item choose-item2 active">银行卡</span>
+            <span
+                class="choose-item choose-item2"
+                :class="item.pay === 1 && 'active'"
+                v-for="(item, index) in payType"
+                :key="index"
+                @click="choosePayType(index)"
+            >{{item.name}}</span>
         </div>
         <div class="choose-box">
-            <span class="choose-reset">重置</span>
-            <span class="choose-filter">筛选</span>
+            <span class="choose-reset" @click="reset">重置</span>
+            <span class="choose-filter" @click="chooseType">筛选</span>
         </div>
     </div>
 </template>
@@ -25,9 +32,59 @@
         props: {
             show: Boolean
         },
+        data () {
+            return {
+                sortTypeList: [{
+                    name: '综合排序',
+                    type: 1
+                }, {
+                    name: '价格优先',
+                    type: 2
+                }, {
+                    name: '成本率高',
+                    type: 3
+                }, {
+                    name: '成交最多',
+                    type: 4
+                }],
+                sortTypeIndex: 0,
+                sortType: 1,
+                payType: [{
+                    name: '微信',
+                    pay: 1
+                }, {
+                    name: '支付宝',
+                    pay: 1
+                }, {
+                    name: '银行卡',
+                    pay: 1
+                }]
+            }
+        },
         methods: {
             hide () {
-                this.$emit('hide', this.show)
+                this.$emit('hide')
+            },
+            chooseSortType (index, type) {
+                this.sortTypeIndex = index
+                this.sortType = type
+            },
+            choosePayType (index) {
+                if (this.payType[index].pay === 1) {
+                    this.payType[index].pay = 0
+                } else {
+                    this.payType[index].pay =1
+                }
+            },
+            chooseType () {
+                this.$emit('chooseType', this.sortType, this.payType[0].pay, this.payType[1].pay, this.payType[2].pay)
+                this.hide()
+            },
+            reset () {
+                this.sortTypeIndex = 0
+                this.payType[0].pay = 1
+                this.payType[1].pay = 1
+                this.payType[2].pay = 1
             }
         }
     }

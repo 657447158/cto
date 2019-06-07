@@ -49,7 +49,40 @@ export default {
     buySomeCoinDetail (params) {
         return ajax({
             type: 'POST',
-            url: proxy + '/	api/otc/buySomeCoinDetail',
+            url: proxy + '/api/otc/buySomeCoinDetail',
+            params: Object.assign({...params})
+        }) 
+    },
+    /**
+     * [获取用户信息]
+     */
+    getOtcUserInfo (params) {
+        return ajax({
+            loading: false,
+            type: 'POST',
+            url: proxy + '/api/otc/getOtcUserInfo',
+            params: Object.assign({...params})
+        }) 
+    },
+    /**
+     * [我要买/卖币-下单]
+     */
+    createBuyOrder (params) {
+        return ajax({
+            loading: false,
+            type: 'POST',
+            url: proxy + '/api/otc/createBuyOrder',
+            params: Object.assign({...params})
+        }) 
+    },
+    /**
+     * [我的订单]
+     */
+    listMyOrder (params) {
+        return ajax({
+            loading: false,
+            type: 'POST',
+            url: proxy + '/api/otc/listMyOrder',
             params: Object.assign({...params})
         }) 
     }

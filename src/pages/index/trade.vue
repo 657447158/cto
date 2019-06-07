@@ -112,6 +112,16 @@ export default {
 				})
 				return
 			}
+			Ajax.createBuyOrder({
+				requestNo: new Date().getTime(),
+				otcBuyId: this.otcBuyId,
+				buyNum: this.buyNum,
+				buyMoney: this.buySum
+			}).then(res => {
+				console.log(res)
+			}).catch(err => {
+				console.log(err)
+			})
 		},
 		// 买入数量输入框聚焦事件
 		numFocusFn () {

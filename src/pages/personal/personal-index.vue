@@ -3,14 +3,14 @@
         <!-- 用户信息 -->
         <div class="header">
             <span class="img-box">
-                <!-- <img src="" alt=""> -->
+                <img :src="userInfo.headImage" alt="">
             </span>
             <div class="word-box">
-                <p class="phone">135****5539</p>
+                <p class="phone">{{userInfo.nickName}}</p>
                 <div class="order-info">
-                    <span>0单</span>
+                    <span>{{userInfo.dealNum}}单</span>
                     <span>|</span>
-                    <span>0%</span>
+                    <span>{{userInfo.dealRatio}}</span>
                 </div>
             </div>
         </div>
@@ -44,8 +44,29 @@
     </div>
 </template>
 <script>
+import Ajax from '@/service'
 export default {
-
+    data () {
+        return {
+            userInfo: {}
+        }
+    },
+    created () {
+        this.getUserInfo()
+    },
+    methods: {
+        getUserInfo () {
+            Ajax.getOtcUserInfo()
+                .then(res => {
+                    if (res.code === '0000') {
+                        this.userInfo = res.data
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        }
+    }
 }
 </script>
 <style lang="scss" scoped>
