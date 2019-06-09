@@ -122,7 +122,7 @@
             &.active {
                 color: $fc07;
                 background-color: #e9edfd;
-                border: 2px solid;
+                border: 1px solid;
             }
         }
         &-item1 {

@@ -18,7 +18,9 @@ const defaultParam = {
   cancelValue: '取消',
   align: 'center',
   comfirmFn: null,
-  cancelFn: null
+  cancelFn: null,
+  // content里面的点击事件
+  contentFn: null
 }
 
 const initInstrance = () => {

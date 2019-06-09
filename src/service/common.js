@@ -69,7 +69,6 @@ export default {
      */
     createBuyOrder (params) {
         return ajax({
-            loading: false,
             type: 'POST',
             url: proxy + '/api/otc/createBuyOrder',
             params: Object.assign({...params})
@@ -80,9 +79,38 @@ export default {
      */
     listMyOrder (params) {
         return ajax({
-            loading: false,
             type: 'POST',
             url: proxy + '/api/otc/listMyOrder',
+            params: Object.assign({...params})
+        }) 
+    },
+    /**
+     * [订单详情]
+     */
+    getBuyOrderDetail (params) {
+        return ajax({
+            type: 'POST',
+            url: proxy + '/api/otc/getBuyOrderDetail',
+            params: Object.assign({...params})
+        }) 
+    },
+    /**
+     * [我要买/卖币-取消]
+     */
+    cancelBuyOrder (params) {
+        return ajax({
+            type: 'POST',
+            url: proxy + '/api/otc/cancelBuyOrder',
+            params: Object.assign({...params})
+        }) 
+    },
+    /**
+     * [我要买/卖币-用户/商家已完成付款]
+     */
+    finishPayBuyOrder (params) {
+        return ajax({
+            type: 'POST',
+            url: proxy + '/api/otc/finishPayBuyOrder',
             params: Object.assign({...params})
         }) 
     }

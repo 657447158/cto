@@ -4,7 +4,7 @@
             <div class="cto-dialog-mask mask" @click="close"></div>
             <div class="cto-dialog">
                 <div class="cto-dialog-hd" v-if="title">{{title}}</div>
-                <div class="cto-dialog-bd" :style="'text-align:' + align" v-html="content"></div>
+                <div class="cto-dialog-bd" :style="'text-align:' + align" v-html="content" @click="ctFn"></div>
                 <div class="cto-dialog-ft" v-if="showConfirm">
                     <div class="cto-dialog-cancel" v-if="cancelValue" @click="close">{{cancelValue}}</div>
                     <div class="cto-dialog-comfirm" @click="open">{{comfirmValue}}</div>
@@ -24,6 +24,7 @@
             comfirmValue: String,
             comfirmFn: Function,
             cancelFn: Function,
+            contentFn: Function,
             align: {
                 type: String,
                 default: 'left'
@@ -40,13 +41,26 @@
         },
         methods: {
             close () {
-                if (!(typeof this.cancelFn === 'function' && this.cancelFn())) {
+                if (typeof this.cancelFn !== 'function') {
                     this.show = false
+                } else {
+                    this.cancelFn()
                 }
             },
             open () {
-                if (!(typeof this.comfirmFn === 'function' && this.comfirmFn())) {
+                if (typeof this.comfirmFn !== 'function') {
                     this.show = false
+                } else {
+                    this.comfirmFn(() => {
+                        this.show = false
+                    })
+                }
+            },
+            ctFn () {
+                if (typeof this.contentFn === 'function') {
+                    this.contentFn((content) => {
+                        this.content = content
+                    })
                 }
             }
         },

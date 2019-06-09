@@ -14,7 +14,6 @@ export function dateDiff (timestamp) {
     let minute = 1000 * 60;
     let hour = minute * 60;
     let day = hour * 24;
-    let halfamonth = day * 15;
     let month = day * 30;
     let now = new Date().getTime();
     let diffValue = now - timestamp;
@@ -58,4 +57,23 @@ export function dateDiff (timestamp) {
         return parseInt(minC) + "分钟前";
     }
     return '刚刚';
+}
+
+// 将传入的秒数转为分钟形式 mm分ss秒 mm:ss
+export function translateMinute (s, formats = 'mm分ss秒') {
+    let zero = function (value) {
+        if (value < 10) {
+            return '0' + value
+        }
+        return value
+    }
+    let minute = zero(parseInt(s / 60))
+    let secends = zero(s % 60)
+
+    return formats.replace(/mm|ss/ig, (matches) => {
+        return ({
+           mm: minute,
+           ss: secends 
+        })[matches]
+    })
 }

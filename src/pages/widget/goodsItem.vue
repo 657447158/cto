@@ -38,7 +38,7 @@
                     <span class="icon-mobile big zfb" v-if="item.aliPayFlag === 1">&#xe820;</span>
                     <span class="icon-mobile big yhk" v-if="item.bankPayFlag === 1">&#xe608;</span>
                 </div>
-                <router-link tag="div" class="buyorsell-right" :to="{path: 'trade', query: {id: item.otcBuyId}}">{{btnText}}</router-link>
+                <router-link tag="div" class="buyorsell-right" :to="{path: `/trade/${tradeType}`, query: {id: item.otcBuyId}}">{{btnText}}</router-link>
             </div>
         </div>
     </div>
@@ -50,6 +50,11 @@ export default {
         btnText: {
             type: String,
             default: '购买'
+        },
+        // 1：买币 2：卖币
+        tradeType: {
+            type: Number,
+            default: 1
         }
     }
 }

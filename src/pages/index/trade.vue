@@ -24,22 +24,27 @@
     <div class="itembox p03 buybox">
       <div class="buyinfo buyamount">
         <input type="number" placeholder="0.00" v-model="buyNum" @focus="numFocusFn">
-        <p>输入买入数量<span>{{detail.coinName}}</span></p>
+        <p>输入{{text}}数量<span>{{detail.coinName}}</span></p>
         <p>{{detail.restNum || 0}}-{{detail.totalNum}}</p>
       </div>
       <span class="icon-mobile change">&#xe823;</span>
       <div class="buyinfo buyprice">
         <input type="number" placeholder="0.00" v-model="buySum" @focus="sumFocusFn">
-        <p>输入买入金额<span>CNY</span></p>
+        <p>输入{{text}}金额<span>CNY</span></p>
         <p>{{detail.minQuota}}-{{detail.maxQuota}}</p>
       </div>
     </div>
+	<div class="my-total" v-if="tradeType === '2'">
+		<span>我的</span>
+		<span>{{detail.userValidAmount || 0}} {{detail.coinName}}</span>
+		<span @click="inputAll">全部</span>
+	</div>
     <div class="btnbox p03" v-if="buyFlag">
       <router-link tag="div" class="cancle" to="/index">取消({{time}})</router-link>
-      <div class="sure" @click="buyNow">立即买入</div>
+      <div class="sure" @click="buyNow">立即{{text}}</div>
     </div>
-		<div class="btnbox p03" v-else>
-      <div class="disabeld">已超出购买时间</div>
+	<div class="btnbox p03" v-else>
+      <div class="disabeld">已超出{{text1}}时间</div>
     </div>
   </div>
 </template>
@@ -50,6 +55,8 @@ import Toast from '@/components/toast'
 export default {
 	data () {
 		return {
+			// 1：买币 2：卖币
+			tradeType: this.$route.params.type,
 			otcBuyId: this.$route.query.id,
 			detail: {},
 			time: 60,
@@ -61,9 +68,15 @@ export default {
 			numFocus: false,
 			// 买入金额输入框聚焦状态
 			sumFocus: false,
+			text: '买入',
+			text1: '购买'
 		}
 	},
 	created () {
+		if (this.tradeType == 2) {
+			this.text = '卖出'
+			this.text1 = '卖出'
+		}
 		this.getDetail()
 		this.timer = setInterval(() => {
 			if (this.time > 0) {
@@ -83,10 +96,28 @@ export default {
 				if (res.code === '0000') {
 					this.detail = res.data
 				}
-			}).catch(() => {
+			}).catch(err => {
+				console.log(err)
 			})
 		},
-		// 立即买入
+		inputAll () {
+			if (this.detail.userValidAmount < this.detail.restNum) {
+				Toast({
+					message: `请至少输入 ${this.detail.restNum} ${this.detail.coinName}`
+				})
+				return
+			} 
+			if (this.detail.userValidAmount > this.detail.totalNum) {
+				Toast({
+					message: `最多可输入 ${this.detail.totalNum} ${this.detail.coinName}`
+				})
+				return
+			}
+			this.buyNum = this.detail.userValidAmount
+			this.numFocus = true
+			this.sumFocus = false
+		},
+		// 立即买入|卖出
 		buyNow () {
 			if (!this.buyNum || (this.buyNum < this.detail.restNum && this.numFocus)) {
 				Toast({
@@ -118,17 +149,30 @@ export default {
 				buyNum: this.buyNum,
 				buyMoney: this.buySum
 			}).then(res => {
+				if (res.code === '0000') {
+					// 买入
+					let path = '/order-detail-buying'
+					if (this.tradeType === '2') {
+						path = 'order-detail-selling'						
+					}
+					this.$router.push({
+						path: path,
+						query: {
+							id: res.data.buyOrderId
+						}
+					})
+				}
 				console.log(res)
 			}).catch(err => {
 				console.log(err)
 			})
 		},
-		// 买入数量输入框聚焦事件
+		// 买入|卖出数量输入框聚焦事件
 		numFocusFn () {
 			this.numFocus = true
 			this.sumFocus = false
 		},
-		// 买入数量输入框聚焦事件
+		// 买入|卖出数量输入框聚焦事件
 		sumFocusFn () {
 			this.numFocus = false
 			this.sumFocus = true
@@ -141,7 +185,7 @@ export default {
 				return
 			}
 			if (this.numFocus) {
-				// 买入数量聚焦
+				// 买入|卖出数量聚焦
 				this.buySum = (val * this.detail.price).toFixed(4)
 			}
 		},
@@ -151,7 +195,7 @@ export default {
 				return
 			}
 			if (this.sumFocus) {
-				// 买入金额聚焦时
+				// 买入|卖出金额聚焦时
 				this.buyNum = (val / this.detail.price).toFixed(4)
 			}
 		}
@@ -164,11 +208,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .trade {
-  background: $bg05;
-  .p03 {
-    padding: 0 0.3rem;
-  }
-  .btnbox{
+	background: $bg05;
+	.p03 {
+		padding: 0 0.3rem;
+	}
+	.btnbox{
 		margin-top: 0.6rem;
 		display: flex;
 		justify-content: space-between;
@@ -210,80 +254,98 @@ export default {
 				opacity: .8;
 			}
 		}
-  }
-  .itembox {
-    border-top: 0.2rem solid $border02;
-    background: $bg04;
-    .item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      line-height: .9rem;
-      .item-title {
-        font-size: $f30;
-        color: $fc03;
-      }
-      .item-info {
-        font-size: $f24;
-        color: $fc06;
-        font-weight: bold;
-      }
-    }
-    .title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: .3rem 0 .2rem;
-      .title-left {
-        display: flex;
-        align-items: center;
-        font-size: $f30;
-        color: $fc06;
-        font-weight: bold;
-        img {
-          width: 0.7rem;
-          height: 0.7rem;
-          border-radius: 50%;
-          margin-right: 0.3rem;
-        }
-      }
-      .title-right {
-        font-size: $f20;
-        color: $fc03;
-      }
-    }
-    &.buybox {
-      display: flex;
-      padding: 0.3rem 0;
-      justify-content: space-evenly;
-      align-items: center;
-      .change {
-        font-size: 0.6rem;
-        color: $fc11;
-      }
-      .buyinfo {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        input {
-          width: 2rem;
-          line-height: 1rem;
-          font-size: $f44;
-          text-align: center;
-        }
-        p {
-          font-size: $f24;
-          color: $fc02;
-          margin-top: 0.24rem;
-          span {
-            display: inline-block;
-            margin-left: 0.12rem;
-            color: $fc11;
-          }
-        }
-      }
-    }
-  }
+	}
+	.itembox {
+		margin-top: 0.14rem;
+		background: $bg04;
+		.item {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			line-height: .9rem;
+			.item-title {
+			font-size: $f30;
+			color: $fc03;
+			}
+			.item-info {
+			font-size: $f24;
+			color: $fc06;
+			font-weight: bold;
+			}
+		}
+		.title {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: .3rem 0 .2rem;
+			.title-left {
+			display: flex;
+			align-items: center;
+			font-size: $f30;
+			color: $fc06;
+			font-weight: bold;
+			img {
+				width: 0.7rem;
+				height: 0.7rem;
+				border-radius: 50%;
+				margin-right: 0.3rem;
+			}
+			}
+			.title-right {
+				font-size: $f20;
+				color: $fc03;
+			}
+		}
+		&.buybox {
+			display: flex;
+			padding: 0.3rem 0;
+			justify-content: space-evenly;
+			align-items: center;
+			.change {
+				font-size: 0.6rem;
+				color: $fc11;
+			}
+			.buyinfo {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				input {
+					width: 2rem;
+					line-height: 1rem;
+					font-size: $f44;
+					text-align: center;
+				}
+				p {
+					font-size: $f24;
+					color: $fc02;
+					margin-top: 0.24rem;
+					span {
+						display: inline-block;
+						margin-left: 0.12rem;
+						color: $fc11;
+					}
+				}
+			}
+		}
+	}
+	.my-total {
+		display: flex;
+		padding: 0 .32rem;
+		height: .8rem;
+		line-height: .8rem;
+		color: $fc02;
+		background: $bg02;
+		border-top: 1px solid $border01;
+		span {
+			margin-right: 0.4rem;
+			&:first-child {
+				margin-right: 0.25rem;
+			}
+			&:last-child {
+				color: $fc07;
+			}
+		}
+	}
 }
 </style>

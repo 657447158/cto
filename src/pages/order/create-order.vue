@@ -117,8 +117,8 @@
             showPop () {
                 let _this = this
                 _this.show = true
-                    setTimeout(() => {
-                        new Swiper(this.$refs.coinList, {
+                setTimeout(() => {
+                    new Swiper(this.$refs.coinList, {
                         autoPlay: false,
                         initialSlide: _this.coinIndex,
                         wrapper: '.coin-type-item',

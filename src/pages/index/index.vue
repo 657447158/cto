@@ -37,7 +37,7 @@
         <!-- 滚动加载 -->
         <cto-scroll-load @list="getList" requestName="getBuyOrders" :params="params">
             <div class="content" slot="list" v-if="coinList.length > 0">
-                <goods-item :list="coinList" :btnText="btnText" />
+                <goods-item :list="coinList" :btnText="btnText" :tradeType="params.tradeType" />
             </div>
         </cto-scroll-load>
         
@@ -259,7 +259,6 @@ export default {
                 font-size:$f28 ;
                 color: $fc02 ;
                 display: flex;
-
                 align-items: center;
                 &.active{
                     color: $fc07;

@@ -68,10 +68,6 @@
                     })).then(data => {
                         // 允许加载
                         this.flag = true
-                        let total = 0
-                        if (data.page) {
-                            total = data.page.total
-                        }
                         this.dataList(data.data)
                         if (data.data.length > 0) {
                             if (data.page.isLastPage) {

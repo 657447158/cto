@@ -48,12 +48,28 @@ const routes = [
         component: () => import('../pages/personal/personal-card')
     },
     {
-        path: '/orderDetail',
-        name: 'orderDetail',
+        path: '/order-detail',
+        name: 'order-detail',
         meta: {
             title: '订单详情'
         },
         component: () => import('../pages/order/orderDetail.vue')
+    },
+    {
+        path: '/order-detail-buying',
+        name: 'order-detail-buying',
+        meta: {
+            title: '订单详情-已完成(出售)'
+        },
+        component: () => import('../pages/order/order-detail-buying.vue')
+    },
+    {
+        path: '/order-detail-selled',
+        name: 'order-detail-selled',
+        meta: {
+            title: '订单详情-已完成(出售)'
+        },
+        component: () => import('../pages/order/order-detail-selled.vue')
     },
     {
         path: '/create-order',
@@ -80,10 +96,10 @@ const routes = [
         component: () => import('../pages/personal/my-order.vue')
     },
     {
-         path: '/trade',
+        path: '/trade/:type',   // type: 1 买 | 2 卖
         name: 'trade',
         meta: {
-            title: '购买'
+            title: '购买|卖出'
         },
         component: () => import('../pages/index/trade.vue')
     }

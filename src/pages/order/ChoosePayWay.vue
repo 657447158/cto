@@ -6,53 +6,93 @@
         </div>
         <div class="payway-item">
             <div class="left">
-                <img src="http://img1.imgtn.bdimg.com/it/u=1107314399,2602653806&fm=26&gp=0.jpg" class="pay-icon">
-                <span>支持信用还款</span>
+                <img :src="detail.headImage" class="pay-icon">
+                <span>{{detail.buyNickName}}</span>
             </div>
         </div>
-        <div class="payway-item">
+        <div
+            class="payway-item"
+            v-for="(item, index) in payTypeList"
+            :key="index"
+        >
             <div class="left">
-                 <span class="icon-mobile vx pay-icon" >&#xe81f;</span>
-                <span class="way">微信</span>
-                <span class="name">kim8899</span>
+                <span class="icon-mobile pay-icon" :style="{color: item.color}" v-html="item.icon"></span>
+                <span class="way">{{item.name}}</span>
+                <span class="name">{{item.num}}</span>
             </div>
-             <div class="right"></div>
+            <div class="icon-mobile right" :class="typIndex === index && 'active'" v-html="typIndex === index ? '&#xe7a1;' : ''" @click="choosePayType(index)"></div>
         </div>
-         <div class="payway-item">
-            <div class="left">
-                 <span class="icon-mobile pay-icon zfb" >&#xe820;</span>
-                <span class="way">支付宝</span>
-                <span class="name">135455555555</span>
-            </div>
-             <div class="right"></div>
-        </div>
-         <div class="payway-item">
-            <div class="left">
-                 <span class="icon-mobile pay-icon yhk" >&#xe608;</span>
-                <span class="way">银行卡</span>
-                <span class="name">434444443434343432434</span>
-            </div>
-            <div class="right"></div>
-        </div>
-        <div class="btn">
-            确认
-        </div>
+        <div class="btn" @click="confirm">确认</div>
     </div>
 </template>
 <script>
+import Dialog from '@/components/dialog'
+import Toast from '@/components/toast'
+import Ajax from '@/service'
 export default {
-    methods:{
+    props: {
+        detail: Object,
+        payTypeList: Array,
+        buyOrderId: String
+    },
+    data () {
+        return {
+            typIndex: '',
+            // 转账方式 1微信 2支付宝 3银行卡
+            payType: ''
+        }
+    },
+    methods: {
         hide(){
-             this.$emit('hide');
+            this.$emit('hide');
+        },
+        // 选择支付方式
+        choosePayType (index) {
+            this.typIndex = index
+            this.payType = index + 1
+        },
+        confirmPay () {
+            this.$emit('confirmPay')
+        },
+        confirm () {
+            if (this.typIndex === '') {
+                Toast({
+                    message: '请选择转账方式'
+                })
+                return
+            }
+            this.hide()
+            Dialog({
+                title: '确认已经完成付款吗？',
+                content: `<p style="font-size: .26rem; line-height: .4rem;">还未完成付款，请勿点击“确认”,恶意操作3次以上会被列入黑名单</p>`,
+                comfirmFn: (callback) => {
+                    Ajax.finishPayBuyOrder({
+                        buyOrderId: this.buyOrderId,
+                        payType: this.payType
+                    }).then(res => {
+                        if (res.code === '0000') {
+                            this.confirmPay()
+                        } else {
+                            Toast({
+                                message: res.message
+                            })
+                        }
+                    }).catch(err => {
+
+                        console.log(err)
+                    })
+                    callback()
+                }
+            })
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
-.p03{
-      padding: 0 0.3rem;
-  }
+.p03 {
+    padding: 0 0.3rem;
+}
 .paywaybox{
     .title{
         line-height:1rem;
@@ -96,22 +136,20 @@ export default {
             .big{
                 font-size: $f28;
                 margin-right: .14rem;
-           }
-           .vx{
-               color:#69c362;
-           }
-           .zfb{
-               color:#61aff7;
-           }
-            .yhk{
-                color: #efcc94;
-           }
+            }
         }
         .right{
             width: 0.4rem;
             height: 0.4rem;
             border-radius: 50%;
-            border: 1px solid $fc03   ;
+            border: 1px solid $fc03;
+            &.active {
+                font-size: $f24;
+                color: $fc08;
+                line-height: .4rem;
+                text-align: center;
+                background: $fc07;
+            }
         }
     }
     .btn{
@@ -124,6 +162,10 @@ export default {
         color: $fc08;
         margin-top: 0.8rem;
         margin-bottom: 0.2rem;
+        font-size: $f32;
+        &:active {
+            opacity: .8;
+        }
     }
-  }
+}
 </style>

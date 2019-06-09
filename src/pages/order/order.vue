@@ -14,38 +14,80 @@
         <cto-scroll-load @list="getList" requestName="listMyOrder" :params="params">
             <ul class="order-list" slot="list">
                 <li
-                    class="order-list-item"
                     v-for="item in cList"
                     :key="item.orderId"
                 >
-                    <div class="top">
-                        <span class="icon-mobile">&#xe822;</span>
-                        <span class="name">{{item.title}}</span>
-                        <span class="price">￥{{item.buyMoney}}</span>
-                    </div>
-                    <div class="content">
-                        <div class="content-item">
-                            <span class="label">卖家</span>
-                            <p class="img-wrap">
-                                <span class="img-box"></span>
-                                <span>{{item.nickName}}</span>
-                            </p>
+                    <router-link
+                        tag="div"
+                        class="order-list-item"
+                        :to="{path: item.path, query: {id: item.buyOrderId}}"
+                        v-if="item.orderStatus !== 3"
+                    >
+                        <div class="top">
+                            <span class="icon-mobile">&#xe822;</span>
+                            <span class="name">{{item.title}}</span>
+                            <span class="price">￥{{item.buyMoney}}</span>
                         </div>
-                        <div class="content-item">
-                            <span class="label">数量</span>
-                            <span>{{item.buyNum}} {{item.coinName}}</span>
+                        <div class="content">
+                            <div class="content-item">
+                                <span class="label" v-if="item.tradeType === 1">卖家</span>
+                                <span class="label" v-else>买家</span>
+                                <p class="img-wrap">
+                                    <span class="img-box"></span>
+                                    <span>{{item.nickName}}</span>
+                                </p>
+                            </div>
+                            <div class="content-item">
+                                <span class="label">数量</span>
+                                <span>{{item.buyNum}} {{item.coinName}}</span>
+                            </div>
+                            <div class="content-item">
+                                <span class="label">订单号</span>
+                                <span>{{item.orderId}}</span>
+                            </div>
                         </div>
-                        <div class="content-item">
-                            <span class="label">订单号</span>
-                            <span>{{item.orderId}}</span>
+                        <div class="bottom">
+                            <span class="time">{{item.time}}</span>
+                            <span class="state" v-if="item.orderStatus === 1">正在进行</span>
+                            <span class="state" v-else-if="item.orderStatus === 2">已完成</span>
+                            <span class="state" v-else-if="item.orderStatus === 3">已取消</span>
                         </div>
-                    </div>
-                    <div class="bottom">
-                        <span class="time">{{item.time}}</span>
-                        <span class="state" v-if="item.orderStatus === 1">正在进行</span>
-                        <span class="state" v-else-if="item.orderStatus === 2">已完成</span>
-                        <span class="state" v-else-if="item.orderStatus === 3">已取消</span>
-                    </div>
+                    </router-link>
+                    <router-link
+                        tag="div"
+                        class="order-list-item order-list-item-cancel"
+                        :to="{path: item.path, query: {id: item.buyOrderId}}"
+                        v-else
+                    >
+                        <div class="top">
+                            <span class="icon-mobile">&#xe822;</span>
+                            <span class="name">{{item.title}}</span>
+                            <span class="price">￥{{item.buyMoney}}</span>
+                        </div>
+                        <div class="content">
+                            <div class="content-item">
+                                <span class="label" v-if="item.tradeType === 1">卖家</span>
+                                <span class="label" v-else>买家</span>
+                                <p class="img-wrap">
+                                    <span>{{item.nickName}}</span>
+                                </p>
+                            </div>
+                            <div class="content-item">
+                                <span class="label">数量</span>
+                                <span>{{item.buyNum}} {{item.coinName}}</span>
+                            </div>
+                            <div class="content-item">
+                                <span class="label">订单号</span>
+                                <span>{{item.orderId}}</span>
+                            </div>
+                        </div>
+                        <div class="bottom">
+                            <span class="time">{{item.time}}</span>
+                            <span class="state" v-if="item.orderStatus === 1">正在进行</span>
+                            <span class="state" v-else-if="item.orderStatus === 2">已完成</span>
+                            <span class="state" v-else-if="item.orderStatus === 3">已取消</span>
+                        </div>
+                    </router-link>
                 </li>
             </ul>
         </cto-scroll-load>
@@ -67,7 +109,16 @@ export default {
     computed: {
         cList () {
             return this.list.map(item => {
+                item.createDate = item.createDate.replace(/-/g, '/')
                 item.time = dateDiff(new Date(item.createDate).getTime())
+                if (item.tradeType === 1) {
+                    // 买币
+                    item.path = 'order-detail-buying'
+                } else {
+                    // 卖币
+                    item.path = 'order-detail-selling'
+                }
+                
                 return item
             })
         }
@@ -129,6 +180,25 @@ export default {
                 background: $bg02;
                 border-radius: 5px;
             }
+            &-item-cancel {
+                position: relative;
+                overflow: hidden;
+                // background-position: 4.95rem 1.6rem;
+                &::after {
+                    position: absolute;
+                    right: -.3rem;
+                    bottom: -.5rem;
+                    content: '';
+                    display: block;
+                    width: 2.25rem;
+                    height: 2.25rem;
+                    background: url('../../assets/images/order-cancel.png') no-repeat;
+                    background-size: 2.25rem 2.25rem;
+                }
+                * {
+                    color: $fc01!important
+                }
+            }
             .top {
                 display: flex;
                 justify-content: space-between;
@@ -151,13 +221,11 @@ export default {
                 font-size: $f30;
             }
             .content {
-                padding-top: .06rem;
-                background: $bg02;
+                padding: .08rem 0;
                 &-item {
-                    padding-bottom: 0.18rem;
                     display: flex;
                     justify-content: space-between;
-                    line-height: .5rem;
+                    line-height: .48rem;
                     font-size: $f26;
                     color: $fc03;
                 }
