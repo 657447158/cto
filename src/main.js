@@ -4,6 +4,7 @@ import router from './routes'
 import './components'
 import './utils/scale_750'
 import './assets/styles/layout.scss'
+// const VConsole = require('./utils/vconsole')
 
 Vue.config.productionTip = false
 

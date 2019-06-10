@@ -153,7 +153,7 @@ export default {
 					// 买入
 					let path = '/order-detail-buying'
 					if (this.tradeType === '2') {
-						path = 'order-detail-selling'						
+						path = '/order-detail-selling'						
 					}
 					this.$router.push({
 						path: path,

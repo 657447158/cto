@@ -59,17 +59,17 @@ const routes = [
         path: '/order-detail-buying',
         name: 'order-detail-buying',
         meta: {
-            title: '订单详情-已完成(出售)'
+            title: '订单详情-购买'
         },
         component: () => import('../pages/order/order-detail-buying.vue')
     },
     {
-        path: '/order-detail-selled',
-        name: 'order-detail-selled',
+        path: '/order-detail-selling',
+        name: 'order-detail-selling',
         meta: {
-            title: '订单详情-已完成(出售)'
+            title: '订单详情-出售'
         },
-        component: () => import('../pages/order/order-detail-selled.vue')
+        component: () => import('../pages/order/order-detail-selling.vue')
     },
     {
         path: '/create-order',

@@ -113,5 +113,25 @@ export default {
             url: proxy + '/api/otc/finishPayBuyOrder',
             params: Object.assign({...params})
         }) 
+    },
+    /**
+     * [获取可用币种和余额-创建挂单页面用]
+     */
+    getManyCoins (params) {
+        return ajax({
+            type: 'POST',
+            url: proxy + '/api/wallet/getManyCoins',
+            params: Object.assign({...params})
+        }) 
+    },
+    /**
+     * [检查用户已经设置了的账户类型-创建挂单页面用]
+     */
+    getReceiptAccountPayType (params) {
+        return ajax({
+            type: 'POST',
+            url: proxy + '/api/otc/getReceiptAccountPayType',
+            params: Object.assign({...params})
+        }) 
     }
 }

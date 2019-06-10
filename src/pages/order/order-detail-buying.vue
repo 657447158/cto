@@ -2,7 +2,7 @@
   <div class="order-detail">
     <div class="itembox">
       <div class="refresh p03">
-        <span>刷新</span>
+        <span @click="refresh">刷新</span>
       </div>
       <!-- 订单状态为 1-正在进行（包含3个支付状态：1请完成付款，2等待对方确认收款，3已完成） -->
       <div class="paydesc" v-if="orderStatus === 1">{{payStatusText}}</div>
@@ -119,10 +119,13 @@ export default {
         }
     },
     methods:{
+        // 刷新页面
+        refresh () {
+            window.location.reload()
+        },
         // 定时器
         startTimer () {
             this.timer = setInterval(() => {
-                console.log(1)
                 if (this.restSecond > 0) {
                     this.restSecond--
                 } else {
@@ -209,6 +212,7 @@ export default {
                             this.payFlag = false
                         }
                     }).catch(err => {
+                        console.log(err)
                         Toast({
                             type: 'error',
                             message: '服务器错误！'

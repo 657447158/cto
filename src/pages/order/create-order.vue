@@ -1,8 +1,12 @@
 <template>
     <div class="create">
         <div class="create-tab">
-            <span class="active">我要买币</span>
-            <span>我要卖币</span>
+            <span
+                v-for="(item, index) in tabList"
+                :key="index"
+                :class="tabIndex === index && 'active'"
+                @click="chooseTab(index)"
+            >{{item}}</span>
         </div>
         <div class="create-form">
             <div class="create-item">
@@ -13,8 +17,12 @@
                 </div>
             </div>
             <div class="create-item">
-                <span class="label">收购总量({{iconType}})</span>
-                <input type="text" placeholder="0.0001">
+                <span class="label">{{typeText}}总量({{iconType}})</span>
+                <input type="text" placeholder="0.0001" v-model="total">
+            </div>
+            <div class="create-item-sell" v-show="tabIndex === 1">
+                <span>我的 {{myTotal}} {{iconType}}</span>
+                <span @click="inputAll">全部</span>
             </div>
             <div class="create-item">
                 <span class="label">最小交易额(CNY)</span>
@@ -27,9 +35,12 @@
             <div class="create-item">
                 <span class="label">支持付款方式</span>
                 <div class="create-sub-item">
-                    <span>微信</span>
-                    <span>支付宝</span>
-                    <span>银行卡</span>
+                    <span
+                        v-for="(item, index) in payTypeList"
+                        :key="index"
+                        :class="item.focus && 'active'"
+                        @click="choosePayType(index)"
+                    >{{item.title}}</span>
                 </div>
             </div>
         </div>
@@ -37,11 +48,12 @@
             <div class="create-item create-item1">
                 <span class="labal">设置单价</span>
                 <div class="create-sub-item1">
-                    <input id="check" type="checkbox" class="switch" />
-                    <label for="check">
+                    <span class="switch" :class="checked ? 'checked' : 'unchecked'"></span>
+                    <label>
                         <span
                             v-for="(item, index) in priceType"
                             :key="index"
+                            class="status-switch"
                             :class="priceTypeIndex === index && 'active'"
                             @click="choosePriceType(index)"
                         >{{item}}</span>
@@ -52,7 +64,7 @@
             <div class="create-item2" v-show="priceTypeIndex === 0">
                 <div class="create-item2-top">
                     <span class="label">固定价格</span>
-                    <span class="tip">市场参考价￥0.564</span>
+                    <span class="tip">市场参考价￥{{exchangeRate}}</span>
                 </div>
                 <div class="create-item2-bottom">
                     <input type="text" placeholder="不随市价浮动" />
@@ -64,7 +76,7 @@
             <div class="create-item2" v-show="priceTypeIndex === 1">
                 <div class="create-item2-top">
                     <span class="label">设置溢价</span>
-                    <span class="tip">市场参考价￥0.1023</span>
+                    <span class="tip">市场参考价￥{{exchangeRate}}</span>
                     <router-link class="icon-mobile icon-mark" to="mark-detail">&#xe821;</router-link>
                 </div>
                 <div class="create-item2-bottom">
@@ -76,7 +88,11 @@
             <div class="create-item3">
                 <textarea placeholder="请输入备注信息(最多输入20个字符)"></textarea>
             </div>
-            <div class="create-btn" @click="createOrder">创建挂单</div>
+            <div class="create-btn" @click="createOrder" v-show="tabIndex === 0">创建挂单</div>
+            <div class="create-btn-box" v-show="tabIndex === 1">
+                <div class="create-btn" @click="createOrder">委托 {{total || 0}} {{iconType}} 给平台</div>
+                <p>您的 {{iconType}} 交由平台保管，只有对方给你您完成付款后平台才会将 你的 {{iconType}} 发送给对方，请放心交易</p>
+            </div>
         </div>
         <!-- 币种选择modal -->
         <cto-modal :show="show" class="coin-type" dir="bottom" @hide="cancel">
@@ -87,31 +103,80 @@
                 <div class="coin-type-item">
                     <div
                         class="coin-type-subItem"
-                        v-for="(item, index) in coinTypeList"
-                        :key="index"
-                    >{{item}}</div>
+                        v-for="item in coinTypeList"
+                        :key="item.coinId"
+                        :total="item.totalCoin"
+                        :exchangeRate="item.exchangeRate"
+                    >{{item.coinName}}</div>
                 </div>
             </div>
         </cto-modal>
     </div>
 </template>
 <script>
+    import Ajax from '@/service'
     import Swiper from '@/utils/swiper'
     import Dialog from '@/components/dialog'
     export default {
         data () {
             return {
+                tabList: ['我要买币', '我要卖币'],
+                tabIndex: 0,
+                checked: true,
                 priceType: ['浮动价', '一口价'],
                 priceTypeIndex: 0,
                 iconType: 'WL',
                 show: false,
-                coinTypeList: ['WL', 'DKS', 'DSFFD', 'JJNSD', 'SDWER', 'SONZ'],
+                coinTypeList: [],
                 coinIndex: 0,
-                blockShow: true
+                blockShow: true,
+                typeText: '收购',
+                payTypeList: [{
+                    title: '微信',
+                    type: 1,
+                    focus: false,
+                    set: false
+                }, {
+                    title: '支付宝',
+                    type: 2,
+                    focus: false,
+                    set: false
+                }, {
+                    title: '银行卡',
+                    type: 3,
+                    focus: false,
+                    set: false
+                }],
+                total: '',
+                myTotal: 0,
+                // 参考价
+                exchangeRate: ''
             }
         },
+        created () {
+            this.getManyCoins()
+            this.getUserAccount()
+        },
         methods: {
+            inputAll () {
+                this.total = this.myTotal
+            },
+            chooseTab (index) {
+                if (this.tabIndex === index) return
+                this.tabIndex = index
+                if (this.tabIndex === 0) {
+                    this.typeText = '收购'
+                } else {
+                    this.typeText = '出售'
+                }
+            },
+            choosePayType (index) {
+                if (!this.payTypeList[index].set) return
+                this.payTypeList[index].focus = !this.payTypeList[index].focus
+            },
             choosePriceType (index) {
+                if (this.priceTypeIndex === index) return
+                this.checked = !this.checked
                 this.priceTypeIndex = index
             },
             showPop () {
@@ -135,8 +200,47 @@
                 this.show = false
             },
             confirm () {
+                this.total = ''
                 this.iconType = document.querySelector('.swiper-slide-active').innerHTML
+                this.myTotal = document.querySelector('.swiper-slide-active').getAttribute('total')
+                this.exchangeRate = document.querySelector('.swiper-slide-active').getAttribute('exchangeRate')
                 this.show = false
+            },
+            /**
+             * 接口API
+             */
+            getManyCoins () {
+                Ajax.getManyCoins()
+                    .then(res => {
+                        if (res.code === '0000') {
+                            this.coinTypeList = res.data
+                            this.myTotal = res.data[0].totalCoin
+                            this.exchangeRate = res.data[0].exchangeRate
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            },
+            getUserAccount () {
+                Ajax.getReceiptAccountPayType()
+                    .then(res => {
+                        if (res.code === '0000') {
+                            let { wxPayFlag, aliPayFlag, bankPayFlag,  } = res.data
+                            if (wxPayFlag === 1) {
+                                this.payTypeList[0].set = true
+                            }
+                            if (aliPayFlag === 1) {
+                                this.payTypeList[1].set = true
+                            }
+                            if (bankPayFlag === 1) {
+                                this.payTypeList[2].set = true
+                            }
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
             },
             // 创建订单
             createOrder () {
@@ -182,6 +286,19 @@
             margin-top: 0.14rem;
             overflow: hidden;
             background: $bg02;
+        }
+        &-item-sell {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            height: 1.08rem;
+            span {
+                font-size: $f24;
+                margin-left: 0.2rem;
+                &:last-child {
+                    color: $fc07;
+                }
+            }
         }
         &-item {
             display: flex;
@@ -267,7 +384,13 @@
                 font-size: $f24;
                 color: $fc04;
                 background: $bg05;
+                border: 1px solid $bg05;
                 border-radius: 3px;
+            }
+            .active {
+                color: $fc07;
+                border: 1px solid $fc07;
+                background: #e3ebfd;
             }
         }
         &-sub-item1 {
@@ -280,7 +403,10 @@
                 display: none;
                 width: 100%;
                 height: .72rem;
-                &:checked~label::after{
+                &.checked~label::after{
+                    transform: translateX(0);
+                }
+                &.unchecked~label::after {
                     transform: translateX(1.4rem);
                 }
             }
@@ -303,7 +429,7 @@
                     transition: all .3s ease;
                 }
             }
-            span {
+            .status-switch {
                 position: relative;
                 z-index: 1;
                 width: 50%;
@@ -328,7 +454,7 @@
             }
         }
         &-btn {
-            margin-top: 0.52rem;
+            margin: 0.52rem 0;
             width: 100%;
             height: 0.88rem;
             line-height: .88rem;
@@ -339,6 +465,21 @@
             border-radius: .05rem;
             &:active {
                 opacity: .8;
+            }
+        }
+        &-btn-box {
+            margin: 0.52rem 0;
+            width: 100%;
+            .create-btn {
+                margin: 0 0 .25rem 0;
+                width: 100%;
+                height: 0.88rem;
+            }
+            p {
+                padding: 0 .12rem;
+                font-size: $f24;
+                line-height: .3rem;
+                color: $fc02;
             }
         }
     }
