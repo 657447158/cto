@@ -89,6 +89,7 @@ export default {
         }
     },
     created () {
+        this.initOtcUser()
         this.getHotCoin()
         this.getRegionCoin()
     },
@@ -96,6 +97,10 @@ export default {
         /**
          * 请求数据
          */
+        // 进去otc时调用
+        initOtcUser () {
+            Ajax.initOtcUser()
+        },
         // 获取热门币种
         getHotCoin () {
             Ajax.getHotCoin()

@@ -68,7 +68,7 @@
                     <router-link class="icon-mobile icon-mark" to="mark-detail">&#xe821;</router-link>
                 </div>
                 <div class="create-item2-bottom">
-                    <input type="text" placeholder="建议 -20 到 0" v-model="floatPrice" />
+                    <input type="text" placeholder="建议 0 到 20" v-model="floatPrice" />
                     <span>%</span>
                 </div>
                 <p class="create-item2-tip">浮动价 - {{floatPriceEnd}}</p>
@@ -108,6 +108,7 @@
                         :key="item.coinId"
                         :total="item.totalCoin"
                         :exchangeRate="item.exchangeRate"
+                        :coinId="item.coinId"
                     >{{item.coinName}}</div>
                 </div>
             </div>
@@ -119,6 +120,7 @@
     import Swiper from '@/utils/swiper'
     import Toast from '@/components/toast'
     import Dialog from '@/components/dialog'
+import { setTimeout } from 'timers';
     export default {
         data () {
             return {
@@ -153,6 +155,8 @@
                 }],
                 total: '',
                 myTotal: 0,
+                // 币种id
+                coinId: '',
                 // 参考价
                 exchangeRate: '',
                 // 最小交易额
@@ -224,6 +228,7 @@
                 this.iconType = document.querySelector('.swiper-slide-active').innerHTML
                 this.myTotal = document.querySelector('.swiper-slide-active').getAttribute('total')
                 this.exchangeRate = document.querySelector('.swiper-slide-active').getAttribute('exchangeRate')
+                this.coinId = document.querySelector('.swiper-slide-active').getAttribute('coinId')
                 this.show = false
             },
             /**
@@ -236,6 +241,7 @@
                             this.coinTypeList = res.data
                             this.myTotal = res.data[0].totalCoin
                             this.exchangeRate = res.data[0].exchangeRate
+                            this.coinId = res.data[0].coinId
                             this.iconType = res.data[0].coinName
                         }
                     })
@@ -275,6 +281,12 @@
                     })
                     return false
                 }
+                if (this.tabIndex === 1 && Number(this.total) > Number(this.myTotal)) {
+                    Toast({
+                        message: '出售总量不能大于您的资产'
+                    })
+                    return false
+                }
                 if (!this.minSum) {
                     Toast({
                         message: '请输入最小交易额'
@@ -310,9 +322,9 @@
                         })
                         return false
                     }
-                    if (this.floatPrice > 0 || this.floatPrice < -20) {
+                    if (this.floatPrice < 0 || this.floatPrice > 20) {
                         Toast({
-                            message: '溢价最好在-20%-0之间'
+                            message: '溢价最好在 0-20%之间'
                         })
                         return false
                     }
@@ -326,7 +338,7 @@
                 }
                 return true
             },
-            // 创建订单
+            // 创建挂单
             createOrder () {
                 if (!this.verifyFormData()) {
                     return
@@ -336,8 +348,47 @@
                     content: '(创建后将不可修改)',
                     comfirmFn: (callback) => {
                         callback()
+                        this.publishBuyOrder()
                     }
                 })
+            },
+            // 下单API
+            publishBuyOrder () {
+                let params = {
+                    requestNo: new Date().getTime(),
+                    tradeType: this.tabIndex + 1,
+                    coinId: this.coinId,
+                    totalNum: this.total,
+                    minQuota: this.minSum,
+                    maxQuota: this.maxSum,
+                    wxPayFlag: this.payTypeList[0].focus ? 1 : 0,
+                    aliPayFlag: this.payTypeList[1].focus ? 1 : 0,
+                    bankPayFlag: this.payTypeList[2].focus ? 1 : 0,
+                    priceType: this.priceTypeIndex + 1,
+                    remark: this.remark
+                }
+                if (this.priceTypeIndex === 0) {
+                    // 浮动价
+                    params.premiumRatio = this.floatPrice
+                } else {
+                    // 一口价
+                    params.price = this.fixedPrice
+                }
+                Ajax.publishBuyOrder(params)
+                    .then(res => {
+                        if (res.code === '0000') {
+                            Toast({
+                                type: 'sucess',
+                                message: '创建成功！'
+                            })
+                            setTimeout(() => {
+                                this.$router.push('/index')
+                            }, 2000)
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
             }
         },
         watch: {

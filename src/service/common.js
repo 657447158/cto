@@ -4,6 +4,26 @@ let proxy = '/cto'
 
 export default {
     /**
+     * [(重点 )进去otc时调用]
+     */
+    initOtcUser (params) {
+        return ajax({
+            type: 'POST',
+            url: proxy + '/api/otc/initOtcUser',
+            params: Object.assign({...params})
+        })
+    },
+    /**
+     * [单图片上传]
+     */
+    upload (params) {
+        return ajax({
+            type: 'POST',
+            url: proxy + '/api/simple/upload/picture',
+            params: Object.assign({...params})
+        })
+    },
+    /**
      * [币种区域]
      */
     getRegionCoin (params) {
@@ -141,6 +161,26 @@ export default {
         return ajax({
             type: 'POST',
             url: proxy + '/api/otc/publishBuyOrder',
+            params: Object.assign({...params})
+        }) 
+    },
+    /**
+     * [我的挂单-上下架]
+     */
+    upDownListBuyOrder (params) {
+        return ajax({
+            type: 'POST',
+            url: proxy + '/api/otc/upDownListBuyOrder',
+            params: Object.assign({...params})
+        }) 
+    },
+    /**
+     * [我的挂单-撤销]
+     */
+    cancelListBuyOrder (params) {
+        return ajax({
+            type: 'POST',
+            url: proxy + '/api/otc/cancelListBuyOrder',
             params: Object.assign({...params})
         }) 
     }

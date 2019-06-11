@@ -28,14 +28,22 @@
     </div>
 </template>
 <script>
+import Ajax from '@/service'
 export default {
     methods: {
-        fileImage (event) {
+        fileImage (e) {
             event.preventDefault()
-            this.submitForm()
+            this.submitForm(document.querySelector('.upload-btn').files)
             return false
         },
-        submitForm () {
+        submitForm (params) {
+            Ajax.upload({
+                image: params
+            }).then(res => {
+                console.log(res)
+            }).catch(err => {
+                console.log(err)
+            })
         }
     }
 }

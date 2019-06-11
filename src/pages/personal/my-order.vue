@@ -10,7 +10,7 @@
                 <div class="top">
                     <span class="top-name">{{item.title}}</span>
                     <span class="top-time">{{item.createDate}}</span>
-                    <div class="top-box">
+                    <div class="top-box" v-if="item.status === 1 || item.status === 2">
                         <span class="switch" :class="item.checked ? 'checked' : 'unchecked'"></span>
                         <label for="status">
                             <span
@@ -18,7 +18,7 @@
                                 :class="item.statusIndex === index && 'active'"
                                 v-for="(s, index) in status"
                                 :key="index"
-                                @click="confirm(orderIndex, index)"
+                                @click="confirm(orderIndex, index, item.otcBuyId)"
                             >{{s}}</span>
                         </label>
                     </div>
@@ -26,11 +26,11 @@
                 <div class="content">
                     <div class="content-box">
                         <span>单价</span>
-                        <span><i>一口价</i><span>￥{{item.price}}</span></span>
+                        <span><i class="content-type">{{item.priceType === 1 ? '浮动价' : '一口价'}}</i><span>￥{{item.price}}</span></span>
                     </div>
                     <div class="content-box">
                         <span>剩余</span>
-                        <span>1000.0000 {{item.coinName}}</span>
+                        <span>{{item.restNum}} {{item.coinName}}</span>
                     </div>
                     <div class="content-box">
                         <span>已成交</span>
@@ -51,7 +51,9 @@
                         <span class="icon-mobile alipay" v-if="item.aliPayFlag === 1">&#xe820;</span>
                         <span class="icon-mobile card" v-if="item.bankPayFlag === 1">&#xe608;</span>
                     </div>
-                    <span class="cancel">撤销</span>
+                    <span class="selled" v-if="item.status === 0">已取消</span>
+                    <span class="cancel" v-if="item.status === 1 || item.status === 2" @click="cancelListBuyOrder(item.otcBuyId)">撤销</span>
+                    <span class="selled" v-if="item.status === 3">已售完</span>
                 </div>
             </li>
         </ul>
@@ -60,6 +62,9 @@
 </template>
 <script>
     import Dialog from '@/components/dialog'
+    import Ajax from '@/service';
+    import Toast from '@/components/toast'
+import { setTimeout } from 'timers';
     export default {
         data () {
             return {
@@ -73,31 +78,78 @@
                 if (value.length === 0) return
                 // 给每条数据加入一个状态
                 value.map(item => {
-                    item.statusIndex = 0
-                    item.checked = false
+                    item.statusIndex = item.status === 1 ? 1 : 0
+                    item.checked = item.status === 1 ? true : false
                 })
                 this.orderList = this.orderList.concat(value)
             },
-            confirm (orderIndex, index) {
+            confirm (orderIndex, index, otcBuyId) {
                 let _this = this
                 if (index === 0) {
                     Dialog({
                         title: '暂时下架后，别人无法看到你的挂单',
                         comfirmValue: '暂时下架',
-                        comfirmFn: () => {
-                            _this.orderList[orderIndex].checked = false
-                            _this.orderList[orderIndex].statusIndex = index
+                        comfirmFn: (callback) => {
+                            callback()
+                            _this.upDownListBuyOrder(otcBuyId, 2, function() {
+                                _this.orderList[orderIndex].checked = false
+                                _this.orderList[orderIndex].statusIndex = index
+                            })
                         }
                     })
                 } else {
                     Dialog({
                         title: '确定要上架该挂单么?',
-                        comfirmFn: () => {
-                            _this.orderList[orderIndex].checked = true
-                            _this.orderList[orderIndex].statusIndex = index
+                        comfirmFn: (callback) => {
+                            callback()
+                            _this.upDownListBuyOrder(otcBuyId, 1, function() {
+                                _this.orderList[orderIndex].checked = true
+                                _this.orderList[orderIndex].statusIndex = index
+                            })
                         }
                     })
                 }
+            },
+            // 上下架api
+            upDownListBuyOrder (otcBuyId, status, callback) {
+                Ajax.upDownListBuyOrder({
+                    otcBuyId,
+                    status
+                }).then(res => {
+                    if (res.code === '0000') {
+                        callback()
+                        Toast({
+                            type: 'sucess',
+                            message: '操作成功！'
+                        })
+                    } else {
+                        Toast({
+                            message: res.message
+                        })
+                    }
+                })
+            },
+            // 挂单撤销
+            cancelListBuyOrder (otcBuyId) {
+                Dialog({
+                    title: '确定要撤销该挂单么?',
+                    comfirmFn: (callback) => {
+                        callback()
+                        Ajax.cancelListBuyOrder({
+                            otcBuyId
+                        }).then(res => {
+                            if (res.code === '0000') {
+                                Toast({
+                                    type: 'sucess',
+                                    message: '撤销成功！'
+                                })
+                                setTimeout(() => {
+                                    window.location.reload()
+                                })
+                            }
+                        })
+                    }
+                })
             }
         }
     }
@@ -185,6 +237,14 @@
                 font-size: $f24;
                 color: $fc09;
             }
+            &-type {
+                margin-right: 0.05rem;
+                padding: .06rem .1rem;
+                display: inline-block;
+                color: $fc08;
+                background: $fc13;
+                border-radius: 3px;
+            }
         }
         .bottom {
             display: flex;
@@ -209,6 +269,15 @@
                 width: 1.38rem;
                 height: .58rem;
                 color: #ff7076;
+                border: 1px solid;
+                border-radius: 5px;
+                text-align: center;
+                line-height: .58rem;
+            }
+            .selled {
+                width: 1.38rem;
+                height: .58rem;
+                color: $fc02;
                 border: 1px solid;
                 border-radius: 5px;
                 text-align: center;

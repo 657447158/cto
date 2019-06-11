@@ -39,8 +39,8 @@
             return {
                 // 当前页数
                 page: 1,
-                // 总页数
-                totalPage: 1,
+                // 是否最后一页
+                isLastPage: false,
                 // 是否允许加载
                 flag: true,
                 // 无更多数据
@@ -64,18 +64,19 @@
                 if (this.flag) {
                     this.flag = false
                     Ajax[this.requestName](Object.assign({}, this.parameter, {
-                        currentPage: this.page
+                        pageNum: this.page
                     })).then(data => {
                         // 允许加载
                         this.flag = true
                         this.dataList(data.data)
+                        this.isLastPage = data.page.isLastPage
                         if (data.data.length > 0) {
                             if (data.page.isLastPage) {
                                 this.noData = false
                                 this.noMore = true
                                 return
                             }
-                            this.noData = true
+                            this.noData = false
                             this.noMore = false
                             return false
                         } else {
@@ -129,13 +130,11 @@
                 let _this = this
                 // 判断是否到达可滚动加载
                 if (_this.isScroll && _this.getScrollTop() + _this.getClientHeight() + 50 > _this.getScrollHeight()) {
-                    if (_this.page < _this.totalPage && _this.flag) {
+                    if (!_this.isLastPage && _this.flag) {
                         _this.page++
-                        if (_this.page > _this.totalPage) {
-                            return false
-                        } else {
-                            _this.getList(_this.page)
-                        }
+                        _this.getList(_this.page)
+                    } else {
+                        return false
                     }
                 }
             }
