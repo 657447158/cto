@@ -133,5 +133,15 @@ export default {
             url: proxy + '/api/otc/getReceiptAccountPayType',
             params: Object.assign({...params})
         }) 
+    },
+    /**
+     * [我要买/卖币-发布-创建挂单]
+     */
+    publishBuyOrder (params) {
+        return ajax({
+            type: 'POST',
+            url: proxy + '/api/otc/publishBuyOrder',
+            params: Object.assign({...params})
+        }) 
     }
 }

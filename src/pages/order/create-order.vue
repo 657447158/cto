@@ -26,11 +26,11 @@
             </div>
             <div class="create-item">
                 <span class="label">最小交易额(CNY)</span>
-                <input type="text" placeholder="￥1.00">
+                <input type="text" placeholder="￥1.00" v-model="minSum">
             </div>
             <div class="create-item">
                 <span class="label">最大交易额(CNY)</span>
-                <input type="text" placeholder="￥999999.99">
+                <input type="text" placeholder="￥999999.99" v-model="maxSum">
             </div>
             <div class="create-item">
                 <span class="label">支持付款方式</span>
@@ -63,30 +63,31 @@
             <!-- 浮动价 -->
             <div class="create-item2" v-show="priceTypeIndex === 0">
                 <div class="create-item2-top">
-                    <span class="label">固定价格</span>
-                    <span class="tip">市场参考价￥{{exchangeRate}}</span>
-                </div>
-                <div class="create-item2-bottom">
-                    <input type="text" placeholder="不随市价浮动" />
-                    <span>CNY</span>
-                </div>
-                <p class="create-item2-tip">发布后，该产品不会因市场波动而改变</p>
-            </div>
-            <!-- 一口价 -->
-            <div class="create-item2" v-show="priceTypeIndex === 1">
-                <div class="create-item2-top">
                     <span class="label">设置溢价</span>
                     <span class="tip">市场参考价￥{{exchangeRate}}</span>
                     <router-link class="icon-mobile icon-mark" to="mark-detail">&#xe821;</router-link>
                 </div>
                 <div class="create-item2-bottom">
-                    <input type="text" placeholder="建议 0 到 20" />
+                    <input type="text" placeholder="建议 -20 到 0" v-model="floatPrice" />
                     <span>%</span>
                 </div>
-                <p class="create-item2-tip">浮动价 -</p>
+                <p class="create-item2-tip">浮动价 - {{floatPriceEnd}}</p>
             </div>
+            <!-- 一口价 -->
+            <div class="create-item2" v-show="priceTypeIndex === 1">
+                <div class="create-item2-top">
+                    <span class="label">固定价格</span>
+                    <span class="tip">市场参考价￥{{exchangeRate}}</span>
+                </div>
+                <div class="create-item2-bottom">
+                    <input type="text" placeholder="不随市价浮动" v-model="fixedPrice" />
+                    <span>CNY</span>
+                </div>
+                <p class="create-item2-tip">发布后，该产品不会因市场波动而改变</p>
+            </div>
+            <!-- 备注 -->
             <div class="create-item3">
-                <textarea placeholder="请输入备注信息(最多输入20个字符)"></textarea>
+                <textarea placeholder="请输入备注信息(最多输入20个字符)" maxlength="20" v-model="remark"></textarea>
             </div>
             <div class="create-btn" @click="createOrder" v-show="tabIndex === 0">创建挂单</div>
             <div class="create-btn-box" v-show="tabIndex === 1">
@@ -116,6 +117,7 @@
 <script>
     import Ajax from '@/service'
     import Swiper from '@/utils/swiper'
+    import Toast from '@/components/toast'
     import Dialog from '@/components/dialog'
     export default {
         data () {
@@ -125,7 +127,7 @@
                 checked: true,
                 priceType: ['浮动价', '一口价'],
                 priceTypeIndex: 0,
-                iconType: 'WL',
+                iconType: '',
                 show: false,
                 coinTypeList: [],
                 coinIndex: 0,
@@ -134,7 +136,9 @@
                 payTypeList: [{
                     title: '微信',
                     type: 1,
+                    // 用于判断是否选中，添加active类
                     focus: false,
+                    // 判断用户是否设置了该付款方式，未设置则不能选
                     set: false
                 }, {
                     title: '支付宝',
@@ -150,7 +154,19 @@
                 total: '',
                 myTotal: 0,
                 // 参考价
-                exchangeRate: ''
+                exchangeRate: '',
+                // 最小交易额
+                minSum: '',
+                // 最大交易额
+                maxSum: '',
+                // 浮动价
+                floatPrice: '',
+                // 计算后的浮动价
+                floatPriceEnd: '',
+                // 固定价
+                fixedPrice: '',
+                // 备注
+                remark: ''
             }
         },
         created () {
@@ -158,9 +174,11 @@
             this.getUserAccount()
         },
         methods: {
+            // 我要卖币-全部
             inputAll () {
                 this.total = this.myTotal
             },
+            // 我要买币、我要卖币 切换
             chooseTab (index) {
                 if (this.tabIndex === index) return
                 this.tabIndex = index
@@ -170,10 +188,12 @@
                     this.typeText = '出售'
                 }
             },
+            // 选择支持支付方式
             choosePayType (index) {
                 if (!this.payTypeList[index].set) return
                 this.payTypeList[index].focus = !this.payTypeList[index].focus
             },
+            // 设置单价按钮切换（浮动价 | 一口价）
             choosePriceType (index) {
                 if (this.priceTypeIndex === index) return
                 this.checked = !this.checked
@@ -216,6 +236,7 @@
                             this.coinTypeList = res.data
                             this.myTotal = res.data[0].totalCoin
                             this.exchangeRate = res.data[0].exchangeRate
+                            this.iconType = res.data[0].coinName
                         }
                     })
                     .catch(err => {
@@ -242,12 +263,91 @@
                         console.log(err)
                     })
             },
+            // 校验表单
+            verifyFormData () {
+                if (!this.total) {
+                    let text = '购买'
+                    if (this.tabIndex === 1) {
+                        text = '出售'
+                    }
+                    Toast({
+                        message: `请输入${text}总量`
+                    })
+                    return false
+                }
+                if (!this.minSum) {
+                    Toast({
+                        message: '请输入最小交易额'
+                    })
+                    return false
+                }
+                if (this.minSum < 1) {
+                    Toast({
+                        message: '最小交易额不能小于1'
+                    })
+                    return false
+                }
+                if (!this.maxSum) {
+                    Toast({
+                        message: '请输入最大交易额'
+                    })
+                    return false
+                }
+                let arr = this.payTypeList.filter(item => {
+                    return item.focus
+                })
+                if (arr.length === 0) {
+                    Toast({
+                        message: '请选择支持付款方式'
+                    })
+                    return false
+                }
+                // 浮动价
+                if (this.priceTypeIndex === 0) {
+                    if (!this.floatPrice) {
+                        Toast({
+                            message: '请输入溢价区间'
+                        })
+                        return false
+                    }
+                    if (this.floatPrice > 0 || this.floatPrice < -20) {
+                        Toast({
+                            message: '溢价最好在-20%-0之间'
+                        })
+                        return false
+                    }
+                }
+                // 一口价
+                if (this.priceTypeIndex === 1 && !this.fixedPrice) {
+                    Toast({
+                        message: '请输入单价'
+                    })
+                    return false
+                }
+                return true
+            },
             // 创建订单
             createOrder () {
+                if (!this.verifyFormData()) {
+                    return
+                }
                 Dialog({
                     title: '确认创建挂单吗?',
-                    content: '(创建后将不可修改)'
+                    content: '(创建后将不可修改)',
+                    comfirmFn: (callback) => {
+                        callback()
+                    }
                 })
+            }
+        },
+        watch: {
+            floatPrice (val) {
+                let price = Number(val)
+                if (!price) {
+                    this.floatPriceEnd = ''
+                    return
+                }
+                this.floatPriceEnd = ((100 + price) * this.exchangeRate / 100).toFixed(4)
             }
         }
     }
@@ -292,6 +392,7 @@
             justify-content: flex-end;
             align-items: center;
             height: 1.08rem;
+            border-bottom: 2px solid $border01;
             span {
                 font-size: $f24;
                 margin-left: 0.2rem;
@@ -308,6 +409,9 @@
             height: 1.08rem;
             font-size: $f30;
             border-bottom: 2px solid $border01;
+            &:last-child {
+                border-bottom: none;
+            }
             input {
                 text-align: right;
                 &::placeholder {
