@@ -1,7 +1,5 @@
 import ajax from './axios'
 
-let proxy = '/cto'
-
 export default {
     /**
      * [(重点 )进去otc时调用]
@@ -9,7 +7,7 @@ export default {
     initOtcUser (params) {
         return ajax({
             type: 'POST',
-            url: proxy + '/api/otc/initOtcUser',
+            url: '/api/otc/initOtcUser',
             params: Object.assign({...params})
         })
     },
@@ -19,7 +17,7 @@ export default {
     upload (params) {
         return ajax({
             type: 'POST',
-            url: proxy + '/api/simple/upload/picture',
+            url: '/api/simple/upload/picture',
             params: Object.assign({...params})
         })
     },
@@ -29,7 +27,7 @@ export default {
     getRegionCoin (params) {
         return ajax({
             type: 'POST',
-            url: proxy + '/api/coin/region/getRegionCoin',
+            url: '/api/coin/region/getRegionCoin',
             params: Object.assign({...params})
         })
     },
@@ -39,7 +37,7 @@ export default {
     getHotCoin (params) {
         return ajax({
             type: 'POST',
-            url: proxy + '/api/coin/region/getHotCoin',
+            url: '/api/coin/region/getHotCoin',
             params: Object.assign({...params})
         })
     },
@@ -49,9 +47,9 @@ export default {
     getBuyOrders (params) {
         return ajax({
             type: 'POST',
-            url: proxy + '/api/otc/getBuyOrders',
+            url: '/api/otc/getBuyOrders',
             params: Object.assign({...params})
-        }) 
+        })
     },
     /**
      * [我的挂单-列表]
@@ -59,9 +57,9 @@ export default {
     listMarketOrder (params) {
         return ajax({
             type: 'POST',
-            url: proxy + '/api/otc/listMarketOrder',
+            url: '/api/otc/listMarketOrder',
             params: Object.assign({...params})
-        }) 
+        })
     },
     /**
      * [我要买/卖币-买入详情]
@@ -69,9 +67,9 @@ export default {
     buySomeCoinDetail (params) {
         return ajax({
             type: 'POST',
-            url: proxy + '/api/otc/buySomeCoinDetail',
+            url: '/api/otc/buySomeCoinDetail',
             params: Object.assign({...params})
-        }) 
+        })
     },
     /**
      * [获取用户信息]
@@ -80,9 +78,9 @@ export default {
         return ajax({
             loading: false,
             type: 'POST',
-            url: proxy + '/api/otc/getOtcUserInfo',
+            url: '/api/otc/getOtcUserInfo',
             params: Object.assign({...params})
-        }) 
+        })
     },
     /**
      * [我要买/卖币-下单]
@@ -90,9 +88,9 @@ export default {
     createBuyOrder (params) {
         return ajax({
             type: 'POST',
-            url: proxy + '/api/otc/createBuyOrder',
+            url: '/api/otc/createBuyOrder',
             params: Object.assign({...params})
-        }) 
+        })
     },
     /**
      * [我的订单]
@@ -100,9 +98,9 @@ export default {
     listMyOrder (params) {
         return ajax({
             type: 'POST',
-            url: proxy + '/api/otc/listMyOrder',
+            url: '/api/otc/listMyOrder',
             params: Object.assign({...params})
-        }) 
+        })
     },
     /**
      * [订单详情]
@@ -110,9 +108,9 @@ export default {
     getBuyOrderDetail (params) {
         return ajax({
             type: 'POST',
-            url: proxy + '/api/otc/getBuyOrderDetail',
+            url: '/api/otc/getBuyOrderDetail',
             params: Object.assign({...params})
-        }) 
+        })
     },
     /**
      * [我要买/卖币-取消]
@@ -120,9 +118,9 @@ export default {
     cancelBuyOrder (params) {
         return ajax({
             type: 'POST',
-            url: proxy + '/api/otc/cancelBuyOrder',
+            url: '/api/otc/cancelBuyOrder',
             params: Object.assign({...params})
-        }) 
+        })
     },
     /**
      * [我要买/卖币-用户/商家已完成付款]
@@ -130,9 +128,9 @@ export default {
     finishPayBuyOrder (params) {
         return ajax({
             type: 'POST',
-            url: proxy + '/api/otc/finishPayBuyOrder',
+            url: '/api/otc/finishPayBuyOrder',
             params: Object.assign({...params})
-        }) 
+        })
     },
     /**
      * [获取可用币种和余额-创建挂单页面用]
@@ -140,9 +138,9 @@ export default {
     getManyCoins (params) {
         return ajax({
             type: 'POST',
-            url: proxy + '/api/wallet/getManyCoins',
+            url: '/api/wallet/getManyCoins',
             params: Object.assign({...params})
-        }) 
+        })
     },
     /**
      * [检查用户已经设置了的账户类型-创建挂单页面用]
@@ -150,9 +148,9 @@ export default {
     getReceiptAccountPayType (params) {
         return ajax({
             type: 'POST',
-            url: proxy + '/api/otc/getReceiptAccountPayType',
+            url: '/api/otc/getReceiptAccountPayType',
             params: Object.assign({...params})
-        }) 
+        })
     },
     /**
      * [我要买/卖币-发布-创建挂单]
@@ -160,9 +158,9 @@ export default {
     publishBuyOrder (params) {
         return ajax({
             type: 'POST',
-            url: proxy + '/api/otc/publishBuyOrder',
+            url: '/api/otc/publishBuyOrder',
             params: Object.assign({...params})
-        }) 
+        })
     },
     /**
      * [我的挂单-上下架]
@@ -170,9 +168,9 @@ export default {
     upDownListBuyOrder (params) {
         return ajax({
             type: 'POST',
-            url: proxy + '/api/otc/upDownListBuyOrder',
+            url: '/api/otc/upDownListBuyOrder',
             params: Object.assign({...params})
-        }) 
+        })
     },
     /**
      * [我的挂单-撤销]
@@ -180,8 +178,28 @@ export default {
     cancelListBuyOrder (params) {
         return ajax({
             type: 'POST',
-            url: proxy + '/api/otc/cancelListBuyOrder',
+            url: '/api/otc/cancelListBuyOrder',
             params: Object.assign({...params})
-        }) 
+        })
+    },
+    /**
+     * [申诉，理由列表]
+     */
+    getOtcAppealReasonList (params) {
+        return ajax({
+            type: 'POST',
+            url: '/api/otc/getOtcAppealReasonList',
+            params: Object.assign({...params})
+        })
+    },
+    /**
+     * [提交申诉]
+     */
+    setOtcAppeal (params) {
+        return ajax({
+            type: 'POST',
+            url: '/api/otc/setOtcAppeal',
+            params: Object.assign({...params})
+        })
     }
 }

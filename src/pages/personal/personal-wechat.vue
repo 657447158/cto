@@ -28,22 +28,19 @@
     </div>
 </template>
 <script>
-import Ajax from '@/service'
+import axios from 'axios'
 export default {
     methods: {
-        fileImage (e) {
+        fileImage (event) {
             event.preventDefault()
             this.submitForm(document.querySelector('.upload-btn').files)
             return false
         },
         submitForm (params) {
-            Ajax.upload({
-                image: params
-            }).then(res => {
-                console.log(res)
-            }).catch(err => {
-                console.log(err)
-            })
+            axios.post('http://111.231.72.88:8091/cos/api/simple/upload/picture', params)
+                .then(res => {
+                    console.log(res)
+                })
         }
     }
 }

@@ -63,13 +63,13 @@
                 </div>
                 <ul class="cto-modal-list">
                     <li
-                        v-for="(item, index) in list"
+                        v-for="(item, index) in reasonList"
                         :key="index"
                         @click="chooseItem(index)"
                         :class="item.focus && 'active'"
-                    >{{item.title}}</li>
+                    >{{item.reason}}</li>
                 </ul>
-                <span class="cto-modal-confirm">确认</span>
+                <span class="cto-modal-confirm" @click="setOtcAppeal">确认</span>
             </div>
         </cto-modal>
     </div>
@@ -77,6 +77,7 @@
 <script>
 import Ajax from '@/service'
 import { translateMinute } from '@/utils/common'
+import Toast from '@/components/toast'
 export default {
     data () {
         return {
@@ -85,25 +86,8 @@ export default {
             payStatus: 1,
             timer: null,
             restSecond: 900,
-            // payFlag: true,
             show: false,
-            list: [{
-                title: '没有收到对方付款',
-                type: 1,
-                focus: false
-            }, {
-                title: '实际收到金额不对',
-                type: 2,
-                focus: false
-            }, {
-                title: '无法联系到对方',
-                type: 3,
-                focus: false
-            }, {
-                title: '其他',
-                type: 4,
-                focus: false
-            }]
+            reasonList: []
         }
     },
     computed: {
@@ -143,6 +127,7 @@ export default {
     },
     created () {
         this.getOrderDetail()
+        this.getOtcAppealReasonList()
     },
     methods: {
         // 刷新页面
@@ -156,7 +141,7 @@ export default {
             this.show = false
         },
         chooseItem (index) {
-            this.list[index].focus = !this.list[index].focus
+            this.reasonList[index].focus = !this.reasonList[index].focus
         },
         // 定时器
         startTimer () {
@@ -166,10 +151,10 @@ export default {
                 } else {
                     clearInterval(this.timer)
                     this.timer = null
-                    // this.payFlag = false
                 }
             }, 1000)
         },
+        // 获取订单详情
         getOrderDetail () {
             Ajax.getBuyOrderDetail({
                 buyOrderId: this.$route.query.id
@@ -185,6 +170,39 @@ export default {
                 }
             }).catch(err => {
                 console.log(err)
+            })
+        },
+        // 获取申诉理由
+        getOtcAppealReasonList () {
+            Ajax.getOtcAppealReasonList()
+                .then(res => {
+                    if (res.code === '0000') {
+                        res.data.map(item => {
+                            item.focus = false
+                        })
+                        this.reasonList = res.data
+                    }
+                })
+        },
+        // 提交申诉
+        setOtcAppeal () {
+            let reasonId = ''
+            this.reasonList.map(item => {
+                if (item.focus) {
+                    reasonId += item.id + ','
+                }
+            })
+            Ajax.setOtcAppeal({
+                reasonId,
+                buyOrderId: this.detail.buyOrderId
+            }).then(res => {
+                if (res.code === '0000') {
+                    this.hide
+                    Toast({
+                        type: 'sucess',
+                        message: '提交成功！'
+                    })
+                }
             })
         }
     },

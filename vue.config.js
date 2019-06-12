@@ -20,6 +20,13 @@ module.exports = {
                 pathRewrite: {
                     '^/cto': ''
                 }
+            },
+            '/upload': {
+                target: 'http://111.231.72.88:8091',
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/upload': ''
+                }
             }
         }
     }

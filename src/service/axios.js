@@ -1,6 +1,11 @@
 import axios from 'axios'
 import Toast from '@/components/toast'
 
+// if (process.env.NODE_ENV === 'development') {
+//     axios.defaults.baseURL = '/cto'
+// } else if (process.env.NODE_ENV === 'production') {
+//     axios.defaults.baseURL = 'http://129.211.29.207:8082'
+// }
 export default function ajax (p) {
     let options = Object.assign({
         type: 'POST',

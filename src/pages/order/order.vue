@@ -196,7 +196,7 @@ export default {
                     background-size: 2.25rem 2.25rem;
                 }
                 * {
-                    color: $fc01!important
+                    color: $fc10!important
                 }
             }
             .top {

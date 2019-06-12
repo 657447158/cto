@@ -36,8 +36,8 @@
     <div class="disabled-btn p03" v-else-if="orderStatus === 1 && payStatus === 2">
         <span>等待对方确认（{{restMinuteB}}）</span>
     </div>
-    <div class="disabled-btn p03" v-else-if="orderStatus === 2">
-        <span>已完成</span>
+    <div class="go-back-btn p03" v-else-if="orderStatus === 2">
+        <router-link to="/index">返回首页</router-link>
     </div>
     <div class="disabled-btn p03" v-else-if="orderStatus === 3">
         <span>该订单已取消</span>
@@ -417,6 +417,30 @@ export default {
             text-align: center;
             line-height: .88rem;
             background: #dbdde6;
+            &:active {
+                opacity: .8;
+            }
+        }
+    }
+    .go-back-btn {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 0 .32rem;
+        height: 1.2rem;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        font-size: $f32;
+        background: $bg02;
+        a {
+            display: block;
+            width: 100%;
+            height: 0.88rem;
+            background: $fc07;
+            color: $fc08;
+            line-height: .88rem;
             &:active {
                 opacity: .8;
             }
