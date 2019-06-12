@@ -1,6 +1,6 @@
 <template>
     <!-- 个人中心-我的挂单 -->
-    <cto-scroll-load @list="getList" requestName="listMarketOrder">
+    <otc-scroll-load @list="getList" requestName="listMarketOrder">
         <ul class="my-order" slot="list">
             <li
                 class="my-order-item"
@@ -57,7 +57,7 @@
                 </div>
             </li>
         </ul>
-    </cto-scroll-load>
+    </otc-scroll-load>
 
 </template>
 <script>

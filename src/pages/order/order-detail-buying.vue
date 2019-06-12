@@ -44,7 +44,7 @@
     </div>
     <!-- 底部按钮 end -->
     <!-- 更多弹窗 -->
-    <cto-modal :show="moreShow">
+    <otc-modal :show="moreShow">
         <choose-payway
             :detail="detail"
             :payTypeList="payTypeList"
@@ -52,7 +52,7 @@
             @hide="hide"
             @confirmPay="confirmPay"
         />
-    </cto-modal>
+    </otc-modal>
   </div>
 </template>
 <script>

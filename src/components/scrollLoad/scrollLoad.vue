@@ -1,8 +1,8 @@
 <template>
-    <div class="cto-scroll-load" :class="classname">
+    <div class="otc-scroll-load" :class="classname">
         <slot name="list"/>
-        <p class="cto-no-data-text" v-if="noMore"><span>没有更多了</span></p>
-        <div class="cto-no-data" v-if="noData">
+        <p class="otc-no-data-text" v-if="noMore"><span>没有更多了</span></p>
+        <div class="otc-no-data" v-if="noData">
             <span class="icon-mobile">&#xe825;</span>
             <span>{{noDataText}}</span>
         </div>
@@ -11,7 +11,7 @@
 <script>
     import Ajax from '../../service/index.js'
     export default {
-        name: 'cto-scroll-load',
+        name: 'otc-scroll-load',
         props: {
             classname: String,
             list: Array,
@@ -169,7 +169,7 @@
     }
 </script>
 <style lang="scss" scoped>
-    .cto-no-data {
+    .otc-no-data {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -181,7 +181,7 @@
             color: $fc02
         }
     }
-    .cto-no-data-text {
+    .otc-no-data-text {
         text-align: center;
         line-height: 0.88rem;
         color: $fc02;

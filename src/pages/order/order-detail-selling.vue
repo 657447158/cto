@@ -47,7 +47,7 @@
             <p class="order-bottom-tip">(15分钟内对方未完成付款交易会被取消)</p>
         </div>
         <div class="order-bottom" v-else-if="orderStatus === 1 && payStatus === 2">
-            <span class="order-bottom-btn">请确认收到付款（{{restMinute}}）</span>
+            <span class="order-bottom-btn" @click="confirmRecieveMoney">请确认收到付款（{{restMinute}}）</span>
             <p class="order-bottom-tip order-bottom-tip1">收到付款后，请务必在15分钟内确认，如果有付款不及时确认将会被列入黑名单</p>
             <span class="order-bottom-pop" @click="showPop">提交申述</span>
         </div>
@@ -55,13 +55,13 @@
             <router-link class="order-bottom-btn" to="index">返回首页</router-link>
         </div>
         <!-- 投诉弹框 -->
-        <cto-modal :show="show">
-            <div class="cto-modal-box">
-                <div class="cto-modal-top">
+        <otc-modal :show="show">
+            <div class="otc-modal-box">
+                <div class="otc-modal-top">
                     <span>提交申述原因：</span>
                     <span class="icon-mobile" @click="hide">&#xe656;</span>
                 </div>
-                <ul class="cto-modal-list">
+                <ul class="otc-modal-list">
                     <li
                         v-for="(item, index) in reasonList"
                         :key="index"
@@ -69,9 +69,9 @@
                         :class="item.focus && 'active'"
                     >{{item.reason}}</li>
                 </ul>
-                <span class="cto-modal-confirm" @click="setOtcAppeal">确认</span>
+                <span class="otc-modal-confirm" @click="setOtcAppeal">确认</span>
             </div>
-        </cto-modal>
+        </otc-modal>
     </div>
 </template>
 <script>
@@ -83,7 +83,7 @@ export default {
         return {
             detail: {},
             orderStatus: 1,
-            payStatus: 1,
+            payStatus: 2,
             timer: null,
             restSecond: 900,
             show: false,
@@ -161,8 +161,8 @@ export default {
             }).then(res => {
                 if (res.code === '0000') {
                     this.detail = res.data
-                    this.orderStatus = res.data.orderStatus
-                    this.payStatus = res.data.payStatus
+                    // this.orderStatus = res.data.orderStatus
+                    // this.payStatus = res.data.payStatus
                     this.restSecond = res.data.restSecond
                     if (this.detail.orderStatus === 1 && this.detail.payStatus !== 3) {
                         this.startTimer()
@@ -171,6 +171,17 @@ export default {
             }).catch(err => {
                 console.log(err)
             })
+        },
+        // 确认收到付款
+        confirmRecieveMoney () {
+            alert(1)
+            // Ajax.sureBuyOrder({
+            //     buyOrderId: this.detail.buyOrderId
+            // }).then(res => {
+            //     if (res.code === '0000') {
+                    
+            //     }
+            // })
         },
         // 获取申诉理由
         getOtcAppealReasonList () {
@@ -351,7 +362,7 @@ export default {
             height: 0.14rem;
             background: $bg01;
         }
-        .cto-modal {
+        .otc-modal {
             &-box {
                 padding: 0 .4rem;
             }

@@ -87,9 +87,9 @@
         <div class="pay-done" @click="showPop">我已经完成付款（14:58）</div>
     </div>
     <!-- 更多弹窗 -->
-    <cto-modal :show="moreShow">
+    <otc-modal :show="moreShow">
         <choose-payway @hide="hide"/>
-    </cto-modal>
+    </otc-modal>
   </div>
 </template>
 <script>

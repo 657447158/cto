@@ -1,13 +1,13 @@
 <template>
     <transition name="fade">
-        <div class="cto-dialog-wrap" v-if="show">
-            <div class="cto-dialog-mask mask" @click="close"></div>
-            <div class="cto-dialog">
-                <div class="cto-dialog-hd" v-if="title">{{title}}</div>
-                <div class="cto-dialog-bd" :style="'text-align:' + align" v-html="content" @click="ctFn"></div>
-                <div class="cto-dialog-ft" v-if="showConfirm">
-                    <div class="cto-dialog-cancel" v-if="cancelValue" @click="close">{{cancelValue}}</div>
-                    <div class="cto-dialog-comfirm" @click="open">{{comfirmValue}}</div>
+        <div class="otc-dialog-wrap" v-if="show">
+            <div class="otc-dialog-mask mask" @click="close"></div>
+            <div class="otc-dialog">
+                <div class="otc-dialog-hd" v-if="title">{{title}}</div>
+                <div class="otc-dialog-bd" :style="'text-align:' + align" v-html="content" @click="ctFn"></div>
+                <div class="otc-dialog-ft" v-if="showConfirm">
+                    <div class="otc-dialog-cancel" v-if="cancelValue" @click="close">{{cancelValue}}</div>
+                    <div class="otc-dialog-comfirm" @click="open">{{comfirmValue}}</div>
                 </div>
             </div>
         </div>
@@ -16,7 +16,7 @@
 <script>
 
     export default {
-        name: 'cto-dialog',
+        name: 'otc-dialog',
         props: {
             title: String,
             content: String,
@@ -67,16 +67,16 @@
         watch: {
             show (value) {
                 if (value) {
-                    document.querySelector('html').style.overflow = 'hidden'
+                    document.querySeleotcr('html').style.overflow = 'hidden'
                 } else {
-                    document.querySelector('html').style.overflow = 'auto'
+                    document.querySeleotcr('html').style.overflow = 'auto'
                 }
             }
         }
     }
 </script>
 <style lang="scss" scoped>
-    .cto-dialog {
+    .otc-dialog {
         width: 6.4rem;
         border-radius: .1rem;
         background: $bg04;

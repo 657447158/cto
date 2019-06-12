@@ -96,7 +96,7 @@
             </div>
         </div>
         <!-- 币种选择modal -->
-        <cto-modal :show="show" class="coin-type" dir="bottom" @hide="cancel">
+        <otc-modal :show="show" class="coin-type" dir="bottom" @hide="cancel">
             <div class="coin-type-top">
                 <span class="confirm" @click="confirm">完成</span>
             </div>
@@ -112,7 +112,7 @@
                     >{{item.coinName}}</div>
                 </div>
             </div>
-        </cto-modal>
+        </otc-modal>
     </div>
 </template>
 <script>
@@ -225,10 +225,10 @@ import { setTimeout } from 'timers';
             },
             confirm () {
                 this.total = ''
-                this.iconType = document.querySelector('.swiper-slide-active').innerHTML
-                this.myTotal = document.querySelector('.swiper-slide-active').getAttribute('total')
-                this.exchangeRate = document.querySelector('.swiper-slide-active').getAttribute('exchangeRate')
-                this.coinId = document.querySelector('.swiper-slide-active').getAttribute('coinId')
+                this.iconType = document.querySeleotcr('.swiper-slide-active').innerHTML
+                this.myTotal = document.querySeleotcr('.swiper-slide-active').getAttribute('total')
+                this.exchangeRate = document.querySeleotcr('.swiper-slide-active').getAttribute('exchangeRate')
+                this.coinId = document.querySeleotcr('.swiper-slide-active').getAttribute('coinId')
                 this.show = false
             },
             /**

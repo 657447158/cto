@@ -11,7 +11,7 @@
             >{{item}}</span>
         </div>
         <!-- 订单列表 -->
-        <cto-scroll-load @list="getList" requestName="listMyOrder" :params="params">
+        <otc-scroll-load @list="getList" requestName="listMyOrder" :params="params">
             <ul class="order-list" slot="list">
                 <li
                     v-for="item in cList"
@@ -90,7 +90,7 @@
                     </router-link>
                 </li>
             </ul>
-        </cto-scroll-load>
+        </otc-scroll-load>
     </div>
 </template>
 <script>

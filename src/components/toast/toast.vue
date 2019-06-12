@@ -1,8 +1,8 @@
 <template>
   <transition enter-active-class="animation-fade-in" leave-active-class="animation-fade-out">
-  <div class="cto-toast" v-if="show">
-    <div class="cto-toast-mask"></div>
-    <div class="cto-toast-wrap" :class="icon.className">
+  <div class="otc-toast" v-if="show">
+    <div class="otc-toast-mask"></div>
+    <div class="otc-toast-wrap" :class="icon.className">
       <span class="icon icon-mobile" v-if="icon.html" v-html="icon.html"></span>
       <span class="text" v-if="icon.title">{{icon.title}}</span>
     </div>
@@ -11,7 +11,7 @@
 </template>
 <script>
 export default {
-  name: 'cto-toast',
+  name: 'otc-toast',
   props: {
     show: Boolean,
     type: {
@@ -60,7 +60,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .cto-toast{
+  .otc-toast{
     position:fixed;
     left:0;
     right:0;

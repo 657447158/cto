@@ -19,8 +19,8 @@ const defaultParam = {
 }
 
 const initInstrance = () => {
-  const ToastConstructor = Vue.extend(ToastVue)
-  instance = new ToastConstructor({
+  const ToastConstruotcr = Vue.extend(ToastVue)
+  instance = new ToastConstruotcr({
     el: document.createElement('div')
   })
   document.body.appendChild(instance.$el)

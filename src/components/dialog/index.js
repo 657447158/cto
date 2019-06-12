@@ -24,8 +24,8 @@ const defaultParam = {
 }
 
 const initInstrance = () => {
-  const DialogConstructor = Vue.extend(DialogVue)
-  instance = new DialogConstructor({
+  const DialogConstruotcr = Vue.extend(DialogVue)
+  instance = new DialogConstruotcr({
     el: document.createElement('div')
   })
   document.body.appendChild(instance.$el)

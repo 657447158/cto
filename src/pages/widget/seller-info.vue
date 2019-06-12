@@ -86,7 +86,7 @@
             </div>
         </div>
         <!-- 支付方式选择 -->
-        <cto-modal :show="payTypeShow" class="order-type" dir="bottom" @hide="hide">
+        <otc-modal :show="payTypeShow" class="order-type" dir="bottom" @hide="hide">
             <div class="order-type-top">
                 <span class="confirm" @click="confirm">完成</span>
             </div>
@@ -100,7 +100,7 @@
                     >{{item.name}}</div>
                 </div>
             </div>
-        </cto-modal>
+        </otc-modal>
     </div>
 </template>
 <script>
@@ -141,7 +141,7 @@ export default {
         },
         // 支付方式选择-完成
         confirm () {
-            let activeDOM = document.querySelector('.swiper-slide-active')
+            let activeDOM = document.querySeleotcr('.swiper-slide-active')
             this.payTypeShow = false
             this.$emit('sellerConfirm', activeDOM.innerHTML, parseInt(activeDOM.getAttribute('index')))
             // this.payTypeText = activeDOM.innerHTML

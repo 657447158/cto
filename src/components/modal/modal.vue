@@ -1,9 +1,9 @@
 <template>
     <transition enter-active-class="animation-fade-in" leave-active-class="animation-fade-out">
-        <div class="cto-modal" :class="className" v-show="state" :style="styles.parentDistance">
+        <div class="otc-modal" :class="className" v-show="state" :style="styles.parentDistance">
             <div class="mask"></div>
             <transition name="fade" :enter-active-class="enterActiveClass" :leave-active-class="leaveActiveClass">
-                <div class="cto-modal-content" v-show="state" :style="styles.childDistance">
+                <div class="otc-modal-content" v-show="state" :style="styles.childDistance">
                     <slot/>
                 </div>
             </transition>
@@ -12,7 +12,7 @@
 </template>
 <script>
     export default {
-        name: 'cto-modal',
+        name: 'otc-modal',
         data () {
             return {
                 state: this.show
@@ -81,16 +81,16 @@
             show (value) {
                 this.state = value
                 if (value) {
-                    document.querySelector('html').style.overflow = 'hidden'
+                    document.querySeleotcr('html').style.overflow = 'hidden'
                 } else {
-                    document.querySelector('html').style.overflow = 'auto'
+                    document.querySeleotcr('html').style.overflow = 'auto'
                 }
             }
         }
     }
 </script>
 <style lang="scss">
-    .cto-modal {
+    .otc-modal {
         position: fixed;
         left: 0;
         right: 0;

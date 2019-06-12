@@ -16,8 +16,9 @@ export default {
      */
     upload (params) {
         return ajax({
+            baseURL: '/upload',
             type: 'POST',
-            url: '/api/simple/upload/picture',
+            url: '/cos/api/simple/upload/picture',
             params: Object.assign({...params})
         })
     },
@@ -199,6 +200,16 @@ export default {
         return ajax({
             type: 'POST',
             url: '/api/otc/setOtcAppeal',
+            params: Object.assign({...params})
+        })
+    },
+    /**
+     * [确认收到付款]
+     */
+    sureBuyOrder (params) {
+        return ajax({
+            type: 'POST',
+            url: '/api/otc/sureBuyOrder',
             params: Object.assign({...params})
         })
     }

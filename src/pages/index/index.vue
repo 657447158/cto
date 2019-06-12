@@ -35,20 +35,20 @@
             <div class="index-current-price">{{coinName}}当前的价格：<span>¥{{coinPrice}}</span></div>
         </div>
         <!-- 滚动加载 -->
-        <cto-scroll-load @list="getList" requestName="getBuyOrders" :params="params">
+        <otc-scroll-load @list="getList" requestName="getBuyOrders" :params="params">
             <div class="content" slot="list" v-if="coinList.length > 0">
                 <goods-item :list="coinList" :btnText="btnText" :tradeType="params.tradeType" />
             </div>
-        </cto-scroll-load>
+        </otc-scroll-load>
         
         <!-- 更多弹窗 -->
-        <cto-modal :show="moreShow">
+        <otc-modal :show="moreShow">
             <More :show="moreShow" :list="regionCoinsList" @hide="hide" @switchCoinType="switchCoinType" />
-        </cto-modal>
+        </otc-modal>
         <!-- 筛选弹窗 -->
-        <cto-modal :show="chooseShow">
+        <otc-modal :show="chooseShow">
             <Choose :show="chooseShow" @hide="hide" @chooseType="chooseType" />
-        </cto-modal>
+        </otc-modal>
     </div>
 </template>
 <script>
@@ -302,7 +302,7 @@ export default {
                 color: $fc06;
             }
         }
-        /deep/ .cto-scroll-load {
+        /deep/ .otc-scroll-load {
             padding-top: 2.34rem;
         }
         .content{
