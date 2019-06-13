@@ -141,7 +141,7 @@ export default {
         },
         // 支付方式选择-完成
         confirm () {
-            let activeDOM = document.querySeleotcr('.swiper-slide-active')
+            let activeDOM = document.querySelector('.swiper-slide-active')
             this.payTypeShow = false
             this.$emit('sellerConfirm', activeDOM.innerHTML, parseInt(activeDOM.getAttribute('index')))
             // this.payTypeText = activeDOM.innerHTML

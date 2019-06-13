@@ -13,41 +13,65 @@
         </div>
         <!-- 照片上传 -->
         <div class="upload-wrap">
-            <div class="upload-box">
+            <div class="upload-box" v-if="!wxPic">
                 <span class="icon-mobile">&#xe7ff;</span>
                 <p>请上传微信收款码</p>
                 <form action="javascript:;" method="post" @change="fileImage($event)" enctype="multipart/form-data">
-                    <input type="file" name="Filedata" class="upload-btn"/>
+                    <input type="file" name="Filedata" class="upload-btn" />
                     <input type="hidden" name="path"/>
                 </form>
             </div>
-            <p class="tips">提示：打开微信 > 收付款 > 收款码 > 保存图片</p>
+            <p class="tips" v-if="!wxPic">提示：打开微信 > 收付款 > 收款码 > 保存图片</p>
+            <img class="wx-pic" v-else :src="wxPic" />
         </div>
         <!-- 上传按钮 -->
         <span class="submit-btn">提交信息</span>
     </div>
 </template>
 <script>
-import Ajax from '@/service'
-// import axios from 'axios'
+import axios from 'axios'
 export default {
+    data() {
+        return {
+            wxPic: '',
+            srcOthers:'',
+        }
+    },
+
     methods: {
         fileImage (e) {
-            // let formData = new FormData(e.currentTarget)
-            e.preventDefault()
-            // this.submitForm(formData)
-            this.submitForm(document.querySelector('.upload-btn').files)
+            let _this = this
+            let files = e.target.files[0];
+            let topFileUrl = files;
+            console.log(e.target.files[0]);
+            if (!e || !window.FileReader) return  // 看支持不支持FileReader
+            let reader = new FileReader()
+            reader.readAsDataURL(files) // 这里是最关键的一步，转换就在这里
+            reader.onloadend = function () {
+                _this.srcOthers = this.result
+            }
+            console.log(topFileUrl);
+            console.log(_this.srcOthers);
+            let formData =  new FormData();
+            formData.append("image", topFileUrl);
+            event.preventDefault()
+            this.submitForm(formData)
             return false
         },
         submitForm (params) {
-            if (!params) return
-            Ajax.upload({
-                image: params
-            }).then(res => {
-                console.log(res)
-            }).catch(err => {
-                console.log(err)
-            })
+            let headers = {headers: {"Content-Type": "multipart/form-data"}}
+            axios.post("/upload/cos/api/simple/upload/picture", params, headers)
+                .then(res => {
+                    console.log(res)
+                    if (res.data.code === '0000') {
+                        console.log(res.data.data)
+                        console.log(res.data.data.pictureUrl)
+                        this.wxPic = res.data.data.pictureUrl
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                })
         }
     }
 }
@@ -107,7 +131,7 @@ export default {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 3.2rem;
+            min-height: 3.2rem;
             color: $fc12;
             background: $bg03;
             .icon-mobile {
@@ -128,6 +152,14 @@ export default {
             line-height: .88rem;
             &:active {
                 opacity: .8;
+            }
+        }
+        .wx-img-box {
+            margin-top: 0.14rem;
+            padding: .32rem .32rem .6rem;
+            background: $bg02;
+            .wx-pic {
+                width: 100%;
             }
         }
     }

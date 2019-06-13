@@ -2,7 +2,7 @@ import axios from 'axios'
 import Toast from '@/components/toast'
 let baseURL = ''
 if (process.env.NODE_ENV === 'development') {
-    baseURL = '/cto'
+    baseURL = '/otc'
 } else if (process.env.NODE_ENV === 'production') {
     baseURL = 'http://129.211.29.207:8082'
 }

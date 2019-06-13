@@ -14,11 +14,11 @@ module.exports = {
     },
     devServer: {
         proxy: {
-            '/cto': {
+            '/otc': {
                 target: 'http://129.211.29.207:8082',
                 changeOrigin: true,
                 pathRewrite: {
-                    '^/cto': ''
+                    '^/otc': ''
                 }
             },
             '/upload': {

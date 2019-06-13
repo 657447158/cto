@@ -72,6 +72,12 @@
                 <span class="otc-modal-confirm" @click="setOtcAppeal">确认</span>
             </div>
         </otc-modal>
+        <!-- 输入密码弹框 -->
+        <otc-modal :show="psdShow">
+            <div class="otc-modal-psd">
+
+            </div>
+        </otc-modal>
     </div>
 </template>
 <script>
@@ -87,7 +93,8 @@ export default {
             timer: null,
             restSecond: 900,
             show: false,
-            reasonList: []
+            reasonList: [],
+            psdShow: false
         }
     },
     computed: {
@@ -410,6 +417,16 @@ export default {
                 text-align: center;
                 line-height: .88rem;
                 background: $fc07;
+            }
+            /* 密码弹窗样式 */
+            &-psd {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 6.12rem;
+                height: 4.62rem;
+                transform: translate(-50%, -50%);
+                background: $bg04;
             }
         }
     }

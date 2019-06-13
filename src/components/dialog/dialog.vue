@@ -67,9 +67,9 @@
         watch: {
             show (value) {
                 if (value) {
-                    document.querySeleotcr('html').style.overflow = 'hidden'
+                    document.querySelector('html').style.overflow = 'hidden'
                 } else {
-                    document.querySeleotcr('html').style.overflow = 'auto'
+                    document.querySelector('html').style.overflow = 'auto'
                 }
             }
         }
