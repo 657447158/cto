@@ -212,5 +212,55 @@ export default {
             url: '/api/otc/sureBuyOrder',
             params: Object.assign({...params})
         })
+    },
+    /**
+     * [输入支付密码后拿到支付凭证]
+     */
+    checkUserPayPassword (params) {
+        return ajax({
+            type: 'POST',
+            url: '/app/pay/checkUserPayPassword',
+            params: Object.assign({...params})
+        })
+    },
+    /**
+     * [获取收款账户详情]
+     */
+    getReceiptAccountInfo (params) {
+        return ajax({
+            type: 'POST',
+            url: '/api/otc/getReceiptAccountInfo',
+            params: Object.assign({...params})
+        })
+    },
+    /**
+     * [微信支付]
+     */
+    setWxPayInfo (params) {
+        return ajax({
+            type: 'POST',
+            url: '/api/otc/setWxPayInfo',
+            params: Object.assign({...params})
+        })
+    },
+    /**
+     * [支付宝支付]
+     */
+    setAliPayInfo (params) {
+        return ajax({
+            type: 'POST',
+            url: '/api/otc/setAliPayInfo',
+            params: Object.assign({...params})
+        })
+    },
+    /**
+     * [银行卡支付]
+     */
+    setBankPayInfo (params) {
+        return ajax({
+            type: 'POST',
+            url: '/api/otc/setBankPayInfo',
+            params: Object.assign({...params})
+        })
     }
 }

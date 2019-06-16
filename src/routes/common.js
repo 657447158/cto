@@ -1,5 +1,10 @@
 const routes = [
     {
+        path: '/',
+        redirect: '/index',
+        component: () => import('../pages/index/index')
+    },
+    {
         path: '/index',
         name: 'index',
         meta: {

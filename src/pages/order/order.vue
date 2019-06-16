@@ -183,7 +183,6 @@ export default {
             &-item-cancel {
                 position: relative;
                 overflow: hidden;
-                // background-position: 4.95rem 1.6rem;
                 &::after {
                     position: absolute;
                     right: -.3rem;
@@ -239,7 +238,6 @@ export default {
                 width: 0.4rem;
                 height: 0.4rem;
                 border-radius: 50%;
-                background: #999;
             }
             .bottom {
                 display: flex;

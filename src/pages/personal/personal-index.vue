@@ -18,19 +18,22 @@
         <div class="account">
             <h2>收款账号</h2>
             <ul class="account-list">
-                <router-link tag="li" to="wechat" class="account-item">
+                <router-link tag="li" :to="{path: '/wechat', query: {type: userInfo.wxNo && 1}}" class="account-item">
                     <span class="icon-mobile wechat">&#xe81f;</span>
                     <span>微信</span>
+                    <span>{{userInfo.wxNo}}</span>
                     <span class="icon-mobile icon-right">&#xe6b1;</span>
                 </router-link>
-                <router-link tag="li" to="alipay" class="account-item">
+                <router-link tag="li" :to="{path: '/alipay', query: {type: userInfo.aliNo && 1}}" class="account-item">
                     <span class="icon-mobile alipay">&#xe820;</span>
                     <span>支付宝</span>
+                    <span>{{userInfo.aliNo}}</span>
                     <span class="icon-mobile icon-right">&#xe6b1;</span>
                 </router-link>
-                <router-link tag="li" to="card" class="account-item">
+                <router-link tag="li" :to="{path: '/card', query: {type: userInfo.bankCardNumber && 1}}" class="account-item">
                     <span class="icon-mobile card">&#xe608;</span>
                     <span>银行卡</span>
+                    <span>{{userInfo.bankCardNumber}}</span>
                     <span class="icon-mobile icon-right">&#xe6b1;</span>
                 </router-link>
             </ul>
@@ -82,7 +85,6 @@ export default {
             margin-right: 0.32rem;
             width: 1.2rem;
             height: 1.2rem;
-            background: #999;
             border-radius: 50%;
             overflow: hidden;
         }
@@ -158,9 +160,9 @@ export default {
                 color: #74c3ed;
                 font-size: $f44;
             }
-            .icon-right {
-                
-            }
+        }
+        .icon-right {
+            margin-left: 0.1rem;
         }
     }
 </style>

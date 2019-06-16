@@ -3,11 +3,11 @@
         <div class="input-box">
             <div class="wechat-item">
                 <span class="label">微信号</span>
-                <input type="text" placeholder="请输入微信号" />
+                <input type="text" placeholder="请输入微信号" v-model="wxNo" />
             </div>
             <div class="wechat-item">
                 <span class="label">真实姓名</span>
-                <input type="text" placeholder="请输入姓名" />
+                <input type="text" placeholder="请输入姓名" v-model="wxRealName" />
             </div>
             <p class="tips">(微信收款码的真实姓名)</p>
         </div>
@@ -22,22 +22,39 @@
                 </form>
             </div>
             <p class="tips" v-if="!wxPic">提示：打开微信 > 收付款 > 收款码 > 保存图片</p>
-            <img class="wx-pic" v-else :src="wxPic" />
+            <div class="upload-box upload-box-edit" v-else>
+                <form action="javascript:;" method="post" @change="fileImage($event)" enctype="multipart/form-data" v-if="type === 0">
+                    <input type="file" name="FiledataEdit" class="upload-btn" />
+                    <input type="hidden" name="path"/>
+                </form>
+                <img class="wx-pic" :src="wxPic" />
+            </div>
         </div>
+        <!-- 重新编辑 -->
+        <span class="submit-btn" @click="edit" v-if="type === 1">重新编辑</span>
         <!-- 上传按钮 -->
-        <span class="submit-btn">提交信息</span>
+        <span class="submit-btn" @click="confirmInfo" v-else>提交信息</span>
     </div>
 </template>
 <script>
 import axios from 'axios'
+import Ajax from '@/service'
+import Toast from '@/components/toast'
 export default {
     data() {
         return {
+            type: parseInt(this.$route.query.type),
+            wxNo: '',
+            wxRealName: '',
             wxPic: '',
             srcOthers:'',
         }
     },
-
+    created () {
+        if (this.type === 1) {
+            this.getAccountInfo()
+        }
+    },
     methods: {
         fileImage (e) {
             let _this = this
@@ -62,16 +79,53 @@ export default {
             let headers = {headers: {"Content-Type": "multipart/form-data"}}
             axios.post("/upload/cos/api/simple/upload/picture", params, headers)
                 .then(res => {
-                    console.log(res)
                     if (res.data.code === '0000') {
-                        console.log(res.data.data)
-                        console.log(res.data.data.pictureUrl)
                         this.wxPic = res.data.data.pictureUrl
                     }
                 })
                 .catch(err => {
                     console.log(err)
                 })
+        },
+        // 获取收款账户详情
+        getAccountInfo () {
+            Ajax.getReceiptAccountInfo({
+                payType: 1
+            }).then(res => {
+                if (res.code === '0000') {
+                    this.wxNo = res.data.wxNo
+                    this.wxRealName = res.data.wxRealName
+                    this.wxPic = res.data.wxPaymentCode
+                }
+            }).catch(err => {
+                console.log(err)
+            })
+        },
+        // 提交信息
+        confirmInfo () {
+            Ajax.setWxPayInfo({
+                wxNo: this.wxNo,
+                wxRealName: this.wxRealName,
+                wxPaymentCode: this.wxPic,
+            }).then(res => {
+                if (res.code === '0000') {
+                    Toast({
+                        type: 'sucess',
+                        message: '信息提交成功'
+                    })
+                } else {
+                    Toast({
+                        type: 'error',
+                        message: res.message
+                    })
+                }
+            }).catch(err => {
+                console.log(err)
+            })
+        },
+        // 编辑信息
+        edit () {
+            this.type = 0
         }
     }
 }
@@ -139,8 +193,11 @@ export default {
                 font-size: 1rem;
             }
         }
+        .upload-box-edit {
+            position: relative;
+        }
         .submit-btn {
-            margin: .6rem auto 0;
+            margin: .6rem auto;
             display: block;
             width: 6.86rem;
             height: 0.88rem;

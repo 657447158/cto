@@ -27,7 +27,7 @@
              <div class="pay-item">
                 <span>收款地址</span>
                 <div class="pay-info-right">
-                    <span>打开微信</span> <span class="icon-mobile  icon-ml">&#xe6b1;</span>
+                    <a href="weixin://"><span>打开微信</span> <span class="icon-mobile  icon-ml">&#xe6b1;</span></a>
                 </div>
             </div>
             <div class="pay-qrcode">
@@ -51,7 +51,7 @@
              <div class="pay-item">
                 <span>收款地址</span>
                 <div class="pay-info-right">
-                    <span>打开支付宝</span> <span class="icon-mobile  icon-ml">&#xe6b1;</span>
+                    <a href="alipay://"><span>打开支付宝</span> <span class="icon-mobile  icon-ml">&#xe6b1;</span></a>
                 </div>
             </div>
             <div class="pay-qrcode">

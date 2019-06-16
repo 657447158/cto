@@ -13,12 +13,12 @@
   const PERSONAL ='personal';
   export default {
     components: {
-		Footer
+		  Footer
     },
     data () {
-		return {
-			showFooter:true,
-		}
+      return {
+        showFooter:true,
+      }
     },
     watch:{
       $route(to){   

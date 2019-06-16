@@ -1,7 +1,7 @@
 <template>
     <div class="footer">
         <router-link tag="div" to="index" class="footer-item">
-            <span class="icon-mobile">&#xe7f6;</span>
+            <span class="icon-mobile">&#xe76b;</span>
             <span>首页</span>
         </router-link>
         <router-link tag="div" to="order" class="footer-item">

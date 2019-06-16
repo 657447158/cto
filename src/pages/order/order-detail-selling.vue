@@ -73,17 +73,39 @@
             </div>
         </otc-modal>
         <!-- 输入密码弹框 -->
-        <otc-modal :show="psdShow">
-            <div class="otc-modal-psd">
-
+        <transition enter-active-class="animation-fade-in" leave-active-class="animation-fade-out">
+            <div class="otc-modal-psd" v-show="psdShow">
+                <div class="otc-modal-psd-box">
+                    <div class="otc-modal-psd-top">
+                        <span class="title">输入支付密码</span>
+                        <span class="icon-mobile" @click="hide">&#xe656;</span>
+                    </div>
+                    <div class="otc-modal-psd-ct">
+                        <p class="title">OTC场外兑换</p>
+                        <p><span class="num">{{detail.buyNum}}</span><span>{{detail.coinName}}</span></p>
+                    </div>
+                    <div class="otc-modal-psd-input">
+                        <input type="password" maxlength="6" v-model="password" ref="psd" />
+                        <ul>
+                            <li :class="password.length === 0 && 'focus'"><i v-show="password.length > 0"></i></li>
+                            <li :class="password.length === 1 && 'focus'"><i v-show="password.length > 1"></i></li>
+                            <li :class="password.length === 2 && 'focus'"><i v-show="password.length > 2"></i></li>
+                            <li :class="password.length === 3 && 'focus'"><i v-show="password.length > 3"></i></li>
+                            <li :class="password.length === 4 && 'focus'"><i v-show="password.length > 4"></i></li>
+                            <li :class="password.length === 5 && 'focus'"><i v-show="password.length > 5"></i></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-        </otc-modal>
+        </transition>
     </div>
 </template>
 <script>
 import Ajax from '@/service'
 import { translateMinute } from '@/utils/common'
 import Toast from '@/components/toast'
+import md5 from 'blueimp-md5'
+import { setTimeout } from 'timers';
 export default {
     data () {
         return {
@@ -94,7 +116,9 @@ export default {
             restSecond: 900,
             show: false,
             reasonList: [],
-            psdShow: false
+            psdShow: false,
+            password: '',
+            viewHeight: window.innerHeight
         }
     },
     computed: {
@@ -146,6 +170,7 @@ export default {
         },
         hide () {
             this.show = false
+            this.psdShow = false
         },
         chooseItem (index) {
             this.reasonList[index].focus = !this.reasonList[index].focus
@@ -181,14 +206,46 @@ export default {
         },
         // 确认收到付款
         confirmRecieveMoney () {
-            alert(1)
-            // Ajax.sureBuyOrder({
-            //     buyOrderId: this.detail.buyOrderId
-            // }).then(res => {
-            //     if (res.code === '0000') {
-                    
-            //     }
-            // })
+            this.psdShow = true
+        },
+        // 验证密码获取支付凭证
+        checkUserPayPassword () {
+            Ajax.checkUserPayPassword({
+                payPassword :md5(this.password)
+            }).then(res => {
+                if (res.code === '0000') {
+                    Ajax.sureBuyOrder({
+                        buyOrderId: this.detail.buyOrderId,
+                        payCertificate: res.data.payCertificate,
+                        payTimestamps: res.data.payTimestamps
+                    }).then(data => {
+                        if (data.code === '0000') {
+                            this.hide()
+                            Toast({
+                                type: 'sucess',
+                                message: '已确认收款'
+                            })
+                            setTimeout(() => {
+                                window.location.reload()
+                            }, 2000)
+                        } else {
+                            Toast({
+                                type: 'error',
+                                message: res.message
+                            })
+                        }
+                    }).catch(err => {
+                        console.log(err)
+                    })
+                } else {
+                    Toast({
+                        type: 'error',
+                        message: res.message
+                    })
+                }
+            }).catch(err => {
+                console.log(err)
+            })
         },
         // 获取申诉理由
         getOtcAppealReasonList () {
@@ -224,6 +281,13 @@ export default {
             })
         }
     },
+    watch: {
+        password (val) {
+            if (val && val.length === 6) {
+                this.checkUserPayPassword()
+            }
+        }
+    },
     destroyed () {
         clearInterval(this.timer)
         this.timer = null
@@ -232,10 +296,11 @@ export default {
 </script>
 <style lang="scss" scoped>
     .order {
+        position: relative;
         min-height: 100vh;
         background: $bg02;
         .refresh {
-            position: fixed;
+            position: absolute;
             top: 0.08rem;
             right: 0.32rem;
             font-size: $f28;
@@ -370,6 +435,111 @@ export default {
             background: $bg01;
         }
         .otc-modal {
+            /* 密码弹窗样式 */
+            &-psd {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, .7);
+                &-box {
+                    position: absolute;
+                    top: 1.5rem;
+                    left: 50%;
+                    width: 6.12rem;
+                    height: 4.62rem;
+                    transform: translateX(-50%);
+                    background: $bg04;
+                    border-radius: .1rem;
+                }
+                &-top {
+                    padding: 0 .3rem;
+                    display: flex;
+                    align-items: center;
+                    height: 0.99rem;
+                    color: $fc02;
+                    border-bottom: 1px solid $border01;
+                    .title {
+                        flex: 1;
+                        text-align: center;
+                        font-size: $f32;
+                        color: $fc06;
+                        font-weight: bold;
+                    }
+                }
+                &-ct {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    align-items: center;
+                    color: $fc06;
+                    font-weight: bold;
+                    .title {
+                        margin: .3rem 0 .45rem;
+                        font-size: $f28;
+                        color: $fc10;
+                        font-weight: normal;
+                    }
+                    .num {
+                        font-size: .65rem;
+                    }
+                }
+                &-input {
+                    position: relative;
+                    margin-top: 0.5rem;
+                    display: flex;
+                    justify-content: center;
+                    ul {
+                        display: flex;
+                        width: 4.92rem;
+                        height: 0.8rem;
+                        border: 2px solid #b9b9b9;
+                        background: $bg01;
+                    }
+                    li {
+                        position: relative;
+                        width: calc(100% / 6);
+                        height: 0.76rem;
+                        border-right: 1px solid #b9b9b9;
+                        &:last-child {
+                            border-right: none;
+                        }
+                        &.focus {
+                            &::after {
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                content: '';
+                                display: block;
+                                width: 1px;
+                                height: 0.4rem;
+                                background: $border03;
+                                transform: translateY(-50%);
+                                
+                            }
+                        }
+                        i {
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            display: block;
+                            width: .1rem;
+                            height: .1rem;
+                            border-radius: 50%;
+                            background: $fc06;
+                            transform: translate(-50%, -50%);
+                        }
+                    }
+                    input {
+                        position: absolute;
+                        z-index: 10;
+                        width: 4.92rem;
+                        height: 0.82rem;
+                        opacity: 0;
+                    }
+                }
+            }
             &-box {
                 padding: 0 .4rem;
             }
@@ -417,16 +587,6 @@ export default {
                 text-align: center;
                 line-height: .88rem;
                 background: $fc07;
-            }
-            /* 密码弹窗样式 */
-            &-psd {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                width: 6.12rem;
-                height: 4.62rem;
-                transform: translate(-50%, -50%);
-                background: $bg04;
             }
         }
     }

@@ -27,7 +27,10 @@ export default function ajax (p) {
                 duration: 1000000
             })
         }
-		// 设置测试用token
+        // 设置token
+        if (localStorage.getItem('token')) {
+            options.params.token = localStorage.getItem('token')
+        }
         options.params.token = 'bSGRmLzC237iIIMIda/3sw9H+nUtTHlmTZu3gYKVRlTQ0aTkd8tO97oEu4uUAIKu6kT5VEqydFUDbJC8U7UXIQ=='
         axios({
             method: options.type,
