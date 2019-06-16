@@ -1,5 +1,5 @@
 import ajax from './axios'
-
+console.log(process.env.NODE_ENV)
 export default {
     /**
      * [(重点 )进去otc时调用]

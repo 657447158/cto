@@ -40,7 +40,7 @@
                 <goods-item :list="coinList" :btnText="btnText" :tradeType="params.tradeType" />
             </div>
         </otc-scroll-load>
-        
+
         <!-- 更多弹窗 -->
         <otc-modal :show="moreShow">
             <More :show="moreShow" :list="regionCoinsList" @hide="hide" @switchCoinType="switchCoinType" />
@@ -56,7 +56,7 @@ import GoodsItem from '../widget/goodsItem';
 import More from './more'
 import Choose from './choose'
 import Ajax from '@/service'
-
+import axios from 'axios'
 export default {
     components: {
       GoodsItem,
@@ -89,6 +89,28 @@ export default {
         }
     },
     created () {
+        if (this.$route.query.token) {
+            axios({
+                method: 'post',
+                url: '/app/index/',
+                params: {
+                    method: '/wallet/switchTokenForOtc',
+                    mediaType: 'h5',
+                    token: this.$route.query.token,
+                    sign: '',
+                    hasToken: '1'
+                }
+            }).then(res => {
+                if (res.data.code == '1') {
+                    localStorage.setItem("otctoken", res.data.data)
+                }
+            }).catch(err =>{
+                console.log('fail' + err)
+                // that.isCommittedForm = false;
+            });
+
+        }
+
         this.initOtcUser()
         this.getHotCoin()
         this.getRegionCoin()

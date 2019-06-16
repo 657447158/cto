@@ -27,7 +27,15 @@ module.exports = {
                 pathRewrite: {
                     '^/upload': ''
                 }
-            }
+            },
+            '/app/': {
+                changeOrigin: true,
+                target: 'http://129.211.29.207:8091',
+                // 这个是本地的开发调试的环境
+                pathRewrite: {
+                    '^/app/': '/app/'
+                }
+            },
         }
     }
 }
