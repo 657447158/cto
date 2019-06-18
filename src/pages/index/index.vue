@@ -35,7 +35,7 @@
             <div class="index-current-price">{{coinName}}当前的价格：<span>¥{{coinPrice}}</span></div>
         </div>
         <!-- 滚动加载 -->
-        <otc-scroll-load @list="getList" requestName="getBuyOrders" :params="params">
+        <otc-scroll-load @list="getList" requestName="getBuyOrders" :params="params" :preFlag="preFlag">
             <div class="content" slot="list" v-if="coinList.length > 0">
                 <goods-item :list="coinList" :btnText="btnText" :tradeType="params.tradeType" />
             </div>
@@ -84,7 +84,8 @@ export default {
                 bankPayFlag: 0,
                 sortType: 1
             },
-            btnText: '购买'
+            btnText: '购买',
+            preFlag: false
         }
     },
     created () {
@@ -109,6 +110,7 @@ export default {
                         this.coinName = this.navList[0] && this.navList[0].coinName
                         this.coinPrice = this.navList[0] && this.navList[0].coinPrice
                         this.params.coinId = this.navList[0] && this.navList[0].coinId
+                        this.preFlag = true
                     }
                 })
                 .catch(err => {

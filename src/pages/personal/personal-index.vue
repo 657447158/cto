@@ -2,8 +2,8 @@
     <div class="personal">
         <!-- 用户信息 -->
         <div class="header">
-            <span class="img-box">
-                <img :src="userInfo.headImage" alt="">
+            <span class="img-box" :class="!userInfo.headImage && 'otc-no-photo'">
+                <img v-if="userInfo.headImage" :src="userInfo.headImage" />
             </span>
             <div class="word-box">
                 <p class="phone">{{userInfo.nickName}}</p>

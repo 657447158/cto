@@ -69,6 +69,12 @@ img {
 	width: 100%;
 }
 
+.otc-no-photo {
+	background: url('../images/otc-no-photo.png') no-repeat;
+	background-size: 100% 100%;
+	overflow: hidden;
+}
+
 @font-face {
   font-family: 'iconfont';  /* project id 1204833 */
   src: url('//at.alicdn.com/t/font_1204833_pgsm01v18s.eot');

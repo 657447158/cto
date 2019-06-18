@@ -3,7 +3,7 @@
         <slot name="list"/>
         <p class="otc-no-data-text" v-if="noMore"><span>没有更多了</span></p>
         <div class="otc-no-data" v-if="noData">
-            <span class="icon-mobile">&#xe825;</span>
+            <span class="otc-no-data-img"></span>
             <span>{{noDataText}}</span>
         </div>
     </div>
@@ -33,6 +33,10 @@
             noDataText: {
                 type: String,
                 default: '暂无数据'
+            },
+            preFlag: {
+                type: Boolean,
+                default: true
             }
         },
         data () {
@@ -61,7 +65,7 @@
              * @returns
              */
             getList () {
-                if (this.flag) {
+                if (this.flag && this.preFlag) {
                     this.flag = false
                     Ajax[this.requestName](Object.assign({}, this.parameter, {
                         pageNum: this.page
@@ -170,15 +174,18 @@
 </script>
 <style lang="scss" scoped>
     .otc-no-data {
+        padding: 0.4rem 0 .2rem;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 2.6rem;
-        .icon-mobile {
-            margin-bottom: 0.2rem;
-            font-size: 1.2rem;
-            color: $fc02
+        height: 3rem;
+        &-img {
+            display: block;
+            width: 3.34rem;
+            height: 2.57rem;
+            background: url('../../assets/images/otc-no-data.png') no-repeat;
+            background-size: 100% 100%;
         }
     }
     .otc-no-data-text {

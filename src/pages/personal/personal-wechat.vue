@@ -154,7 +154,7 @@ export default {
         .label {
             font-size: $f32;
             font-weight: bold;
-            color: $fc11;
+            color: $fc07;
         }
         input {
             width: 4.7rem;
@@ -186,7 +186,7 @@ export default {
             align-items: center;
             justify-content: center;
             min-height: 3.2rem;
-            color: $fc12;
+            color: $fc07;
             background: $bg03;
             .icon-mobile {
                 margin-bottom: 0.3rem;

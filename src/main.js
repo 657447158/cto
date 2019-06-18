@@ -5,7 +5,6 @@ import axios from 'axios'
 import './components'
 import './utils/scale_750'
 import './assets/styles/layout.scss'
-import Toast from '@/components/toast'
 // const VConsole = require('./utils/vconsole')
 
 Vue.config.productionTip = false
@@ -35,11 +34,7 @@ router.beforeEach((to, from, next) => {
         console.log('fail' + err)
     })
   } else {
-    Toast({
-      type: 'error',
-      message: '未发现用户token'
-    })
-    // next()
+    next()
   }
 })
 

@@ -114,7 +114,7 @@ export default {
         .label {
             font-size: $f32;
             font-weight: bold;
-            color: $fc11;
+            color: $fc07;
         }
         input {
             width: 4.7rem;

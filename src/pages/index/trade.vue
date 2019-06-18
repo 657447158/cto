@@ -161,6 +161,11 @@ export default {
 							id: res.data.buyOrderId
 						}
 					})
+				} else {
+					Toast({
+						type: 'error',
+						message: res.message
+					})
 				}
 				console.log(res)
 			}).catch(err => {
@@ -303,7 +308,7 @@ export default {
 			align-items: center;
 			.change {
 				font-size: 0.6rem;
-				color: $fc11;
+				color: $fc07;
 			}
 			.buyinfo {
 				display: flex;
@@ -323,7 +328,7 @@ export default {
 					span {
 						display: inline-block;
 						margin-left: 0.12rem;
-						color: $fc11;
+						color: $fc07;
 					}
 				}
 			}

@@ -7,8 +7,8 @@
         >
             <div class="title">
                 <div class="title-left">
-                    <span class="img-box">
-                        <img :src="item.headImage" />
+                    <span class="img-box" :class="!item.headImage && 'otc-no-photo'">
+                        <img v-if="item.headImage" :src="item.headImage" />
                     </span>
                     <span>{{item.nickName || '龙猫用户'}}</span>
                 </div>
