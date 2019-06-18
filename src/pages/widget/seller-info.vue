@@ -3,7 +3,9 @@
         <p class="title p03">卖家信息</p>
         <div class="goodstitle p03" @click="showPayTypePop">
             <div class="gt-left">
-                <img :src="detail.headImage" />
+                <span class="img-box" :class="!detail.headImage && 'otc-no-photo'">
+                    <img v-if="detail.headImage" :src="detail.headImage" />
+                </span>
                 <p class="gt-title">{{detail.buyNickName}}</p>
             </div>
             <div class="gt-right">
@@ -144,8 +146,6 @@ export default {
             let activeDOM = document.querySelector('.swiper-slide-active')
             this.payTypeShow = false
             this.$emit('sellerConfirm', activeDOM.innerHTML, parseInt(activeDOM.getAttribute('index')))
-            // this.payTypeText = activeDOM.innerHTML
-            // this.payType = parseInt(activeDOM.getAttribute('index'))
         },
     }
 }
@@ -189,7 +189,8 @@ export default {
     .gt-left{
         display: flex;
         align-items: center;
-        img {
+        .img-box {
+            display: block;
             width: 0.8rem;
             height: 0.8rem;
             border-radius: 50%;
@@ -247,14 +248,15 @@ export default {
     }
     &-list {
         position: relative;
-        padding-top: 1.8rem;
+        padding: 1.2rem 0 .6rem;
         font-size: $f44;
         line-height: .68rem;
         text-align: center;
         background: $bg01;
+        overflow: hidden;
         &:before {
             position: absolute;
-            top: 1.8rem;
+            top: 1.2rem;
             left: 0;
             right: 0;
             content: '';

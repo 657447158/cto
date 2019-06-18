@@ -6,7 +6,9 @@
         </div>
         <div class="payway-item">
             <div class="left">
-                <img :src="detail.headImage" class="pay-icon">
+                <span class="img-box" :class="!detail.headImage && 'otc-no-photo'">
+                    <img v-if="detail.headImage" :src="detail.headImage" />
+                </span>
                 <span>{{detail.buyNickName}}</span>
             </div>
         </div>
@@ -116,7 +118,13 @@ export default {
             align-items: center;
             flex:1;
             font-size: $f30;
-            color: $fc04  ;
+            color: $fc04;
+            .img-box {
+                margin-right: 0.3rem;
+                width: 0.5rem;
+                height: 0.5rem;
+                border-radius: 50%;
+            }
             .pay-icon{
                 width: 0.5rem;
                 height: 0.5rem;
@@ -149,6 +157,7 @@ export default {
                 line-height: .4rem;
                 text-align: center;
                 background: $fc07;
+                border: 1px solid $fc07;
             }
         }
     }
