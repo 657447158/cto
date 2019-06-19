@@ -51,8 +51,11 @@
             <p class="order-bottom-tip order-bottom-tip1">收到付款后，请务必在15分钟内确认，如果有付款不及时确认将会被列入黑名单</p>
             <span class="order-bottom-pop" @click="showPop">提交申述</span>
         </div>
-        <div class="order-bottom" v-else>
+        <div class="order-bottom" v-else-if="orderStatus === 2">
             <router-link class="order-bottom-btn" to="index">返回首页</router-link>
+        </div>
+        <div class="order-bottom disabled-btn" v-else>
+            <span>该订单已取消</span>
         </div>
         <!-- 投诉弹框 -->
         <otc-modal :show="show">
@@ -111,7 +114,7 @@ export default {
         return {
             detail: {},
             orderStatus: 1,
-            payStatus: 2,
+            payStatus: 1,
             timer: null,
             restSecond: 900,
             show: false,
@@ -139,16 +142,14 @@ export default {
         },
         translatePayType () {
             let name = ''
-            switch(this.detail.payType) {
-                case 1:
-                    name = '支付宝'
-                    break
-                case 2:
-                    name = '微信'
-                    break
-                case 3:
-                    name = '银行卡'
-                    break
+            if (this.detail.payType.wxPayFlag === 1) {
+                name = '微信'
+            }
+            if (this.detail.payType.aliPayFlag === 1) {
+                name = '支付宝'
+            }
+            if (this.detail.payType.bankPayFlag === 1) {
+                name = '银行卡'
             }
             return name
         },
@@ -193,8 +194,8 @@ export default {
             }).then(res => {
                 if (res.code === '0000') {
                     this.detail = res.data
-                    // this.orderStatus = res.data.orderStatus
-                    // this.payStatus = res.data.payStatus
+                    this.orderStatus = res.data.orderStatus
+                    this.payStatus = res.data.payStatus
                     this.restSecond = res.data.restSecond
                     if (this.detail.orderStatus === 1 && this.detail.payStatus !== 3) {
                         this.startTimer()
@@ -332,6 +333,11 @@ export default {
                 color: $fc07;
                 font-size: $f44;
             }
+            &-text3 {
+                color: $fc07;
+                font-size: $f44;
+                font-weight: bold;
+            }
             &-price {
                 margin-left: -0.1rem;
                 font-size: .6rem;
@@ -428,6 +434,30 @@ export default {
                 text-align: center;
             }
         }
+        .disabled-btn {
+        padding: 0 .32rem;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1.2rem;
+        background: $bg02;
+        box-shadow: 0 0 .3rem rgba(0, 0, 0, .1);
+        span {
+            margin-top: 0.16rem;
+            display: block;
+            width: 100%;
+            height: .88rem;
+            font-size: $f32;
+            color: $fc08;
+            text-align: center;
+            line-height: .88rem;
+            background: #dbdde6;
+            &:active {
+                opacity: .8;
+            }
+        }
+    }
         .line {
             display: block;
             width: 100%;
