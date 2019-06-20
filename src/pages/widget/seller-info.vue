@@ -6,7 +6,7 @@
                 <span class="img-box" :class="!detail.headImage && 'otc-no-photo'">
                     <img v-if="detail.headImage" :src="detail.headImage" />
                 </span>
-                <p class="gt-title">{{detail.buyNickName}}</p>
+                <p class="gt-title">{{detail.nickName}}</p>
             </div>
             <div class="gt-right">
                 {{payTypeText}} <span class="icon-mobile  icon-ml">&#xe6af;</span>
