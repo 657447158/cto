@@ -20,20 +20,20 @@
                     {{detail.receiptAccount && detail.receiptAccount.wxNo}} <span class="icon-mobile  icon-ml pay-icon">&#xe605;</span>
                 </div>
             </div>
-             <div class="pay-item">
+            <div class="pay-item">
                 <span>真实姓名</span>
                 <div class="pay-info-right">
                     {{detail.receiptAccount && detail.receiptAccount.wxRealName}} <span class="icon-mobile  icon-ml pay-icon">&#xe605;</span>
                 </div>
             </div>
-             <div class="pay-item">
+            <div class="pay-item">
                 <span>收款地址</span>
                 <div class="pay-info-right">
                     <a href="weixin://"><span>打开微信</span> <span class="icon-mobile  icon-ml">&#xe6b1;</span></a>
                 </div>
             </div>
             <div class="pay-qrcode">
-                <img :src="detail.receiptAccount && detail.receiptAccount.wxPaymentCode" />
+                <img :src="detail.receiptAccount && detail.receiptAccount.wxPaymentCode" @click="showPhoto" />
             </div>
         </div>
         <!-- 选择支付宝 -->
@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="pay-qrcode">
-                <img :src="detail.receiptAccount && detail.receiptAccount.aliPaymentCode" />
+                <img :src="detail.receiptAccount && detail.receiptAccount.aliPaymentCode" @click="showPhoto" />
             </div>
         </div>
         <!-- 选择银行卡 -->
@@ -87,6 +87,8 @@
                 </div>
             </div>
         </div>
+        <!-- 图片预览与保存到本地 -->
+        <otc-check-photo :show="photoShow" :imgsrc="imgsrc" @hide="hide"></otc-check-photo>
         <!-- 支付方式选择 -->
         <otc-modal :show="payTypeShow" class="order-type" dir="bottom" @hide="hide">
             <div class="order-type-top">
@@ -116,11 +118,17 @@ export default {
     },
     data () {
         return {
+            imgsrc: '',
+            photoShow: false,
             payTypeShow: false
         }
     },
     methods: {
+        showPhoto () {
+            this.photoShow = true
+        },
         hide () {
+            this.photoShow = false
             this.payTypeShow = false
         },
         // 弹出支付方式选择框
@@ -147,6 +155,11 @@ export default {
             this.payTypeShow = false
             this.$emit('sellerConfirm', activeDOM.innerHTML, parseInt(activeDOM.getAttribute('index')))
         },
+    },
+    watch: {
+        payTypeList (val) {
+            this.imgsrc = val[0].imgsrc
+        }
     }
 }
 </script>

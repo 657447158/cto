@@ -155,7 +155,8 @@ export default {
                             type: 0,
                             num: res.data.receiptAccount.wxNo,
                             icon: '&#xe81f;',
-                            color: '#69c362'
+                            color: '#69c362',
+                            imgsrc: res.data.receiptAccount.wxPaymentCode
                         })
                     }
                     if (aliPayFlag === 1) {
@@ -164,7 +165,8 @@ export default {
                             type: 1,
                             num: res.data.receiptAccount.aliNo,
                             icon: '&#xe820;',
-                            color: '#61aff7'
+                            color: '#61aff7',
+                            imgsrc: res.data.receiptAccount.aliPaymentCode
                         })
                     }
                     if (bankPayFlag === 1) {
@@ -173,7 +175,8 @@ export default {
                             type: 2,
                             num: res.data.receiptAccount.bankCardNumber,
                             icon: '&#xe608;',
-                            color: '#efcc94'
+                            color: '#efcc94',
+                            imgsr: ''
                         })
                     }
                     this.payTypeText = this.payTypeList[0].name
