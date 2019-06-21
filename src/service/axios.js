@@ -3,7 +3,7 @@ import Toast from '@/components/toast'
 let baseURL = ''
 
 // 设置token
-axios.defaults.headers['Otc-Token'] = localStorage.getItem('otctoken')
+axios.defaults.headers.token = localStorage.getItem('otctoken')
 
 export default function ajax (p) {
     let options = Object.assign({
