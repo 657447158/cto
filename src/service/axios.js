@@ -2,6 +2,9 @@ import axios from 'axios'
 import Toast from '@/components/toast'
 let baseURL = ''
 
+// 设置token
+axios.defaults.headers['Otc-Token'] = localStorage.getItem('otctoken')
+
 export default function ajax (p) {
     let options = Object.assign({
         baseURL: baseURL,
@@ -24,9 +27,9 @@ export default function ajax (p) {
             })
         }
         // 设置token
-        if (localStorage.getItem('otctoken')) {
-            options.params.token = localStorage.getItem('otctoken')
-        }
+        // if (localStorage.getItem('otctoken')) {
+        //     options.params.token = localStorage.getItem('otctoken')
+        // }
         axios({
             method: options.type,
             baseURL: '/otc',
