@@ -4,7 +4,7 @@
             <div class="bd">
                 <div class="bd-box">
                     <img :src="imgsrc" />
-                    <p>长按保存至手机相册</p>
+                    <p>按 <a :href="imgsrc" target="_blank" style="color: #2cc7b1; font-size: .32rem">保存</a> 将二维码保存至手机相册</p>
                 </div>
             </div>
         </div>
@@ -58,7 +58,7 @@
             p {
                 margin-top: .24rem;
                 color: $fc08;
-                font-size: $f32;
+                font-size: $f28;
             }
         }
         .ft {
