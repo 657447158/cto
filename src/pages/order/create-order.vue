@@ -194,7 +194,12 @@ import { setTimeout } from 'timers';
             },
             // 选择支持支付方式
             choosePayType (index) {
-                if (!this.payTypeList[index].set) return
+                if (!this.payTypeList[index].set) {
+                    Toast({
+                        message: `你还未设置${this.payTypeList[index].title}收款信息`
+                    })
+                    return
+                }
                 this.payTypeList[index].focus = !this.payTypeList[index].focus
             },
             // 设置单价按钮切换（浮动价 | 一口价）
